@@ -1,0 +1,178 @@
+{
+  "tasks": [
+    {
+      "id": "argo-pedestal-design",
+      "title": "Design Argo Pedestal",
+      "status": "pending",
+      "priority": "high",
+      "category": "feature",
+      "component": "accessories",
+      "description": "Create FreeCAD Python script for the base platform (180x140x25mm) with crystal facet pattern, anti-vibration pads, and optional cable routing channel",
+      "relatedFeature": "fortress-accessories-collection",
+      "subtasks": [
+        "Define parametric dimensions matching NAS base footprint",
+        "Create crystal facet surface pattern",
+        "Add 4x anti-vibration pad recesses",
+        "Design cable routing channel (optional)",
+        "Export STL for print testing"
+      ]
+    },
+    {
+      "id": "rao-halo-design",
+      "title": "Design Rao's Halo LED Ring",
+      "status": "planned",
+      "priority": "medium",
+      "category": "feature",
+      "component": "accessories",
+      "description": "Create FreeCAD Python script for the LED accent ring (160mm OD, 130mm ID) with diffuser housing and WS2812B LED strip channel",
+      "relatedFeature": "fortress-accessories-collection",
+      "subtasks": [
+        "Design ring profile with LED strip channel",
+        "Create frosted diffuser housing geometry",
+        "Add RGB controller compartment",
+        "Design snap-fit assembly for 2-piece print",
+        "Add mounting clips for NAS shell"
+      ]
+    },
+    {
+      "id": "sunstone-shards-design",
+      "title": "Design Sunstone Shards",
+      "status": "planned",
+      "priority": "medium",
+      "category": "feature",
+      "component": "accessories",
+      "description": "Create FreeCAD Python script for 6 decorative crystal pieces (2 sizes) with magnetic bases for desk arrangement",
+      "relatedFeature": "fortress-accessories-collection",
+      "subtasks": [
+        "Design large shard geometry (60mm tall)",
+        "Design small shard geometry (35mm tall)",
+        "Add magnetic base recesses (6mm x 2mm)",
+        "Create variety of facet angles for visual interest",
+        "Generate STL set for batch printing"
+      ]
+    },
+    {
+      "id": "phantom-conduit-design",
+      "title": "Design Phantom Zone Conduit",
+      "status": "planned",
+      "priority": "low",
+      "category": "feature",
+      "component": "accessories",
+      "description": "Create FreeCAD Python script for the segmented cable manager (200mm, 5 sections) with crystal-themed segments",
+      "relatedFeature": "fortress-accessories-collection",
+      "subtasks": [
+        "Design individual cable segment profile",
+        "Create ball-and-socket joint between segments",
+        "Add cable entry/exit openings",
+        "Design 5-segment complete assembly",
+        "Test flexibility and cable routing"
+      ]
+    },
+    {
+      "id": "house-crest-design",
+      "title": "Design House Crest Badge",
+      "status": "planned",
+      "priority": "low",
+      "category": "feature",
+      "component": "accessories",
+      "description": "Create FreeCAD Python script for the status badge (40x50mm) with S-shield design in 3 variants: basic, illuminated, and NFC",
+      "relatedFeature": "fortress-accessories-collection",
+      "subtasks": [
+        "Design base shield outline (40x50mm)",
+        "Create S-emblem relief geometry",
+        "Design illuminated variant LED cavity",
+        "Design NFC variant tag recess",
+        "Add magnetic mounting back"
+      ]
+    },
+    {
+      "id": "kandor-station-design",
+      "title": "Design Kandor Station USB Hub Dock",
+      "status": "planned",
+      "priority": "low",
+      "category": "feature",
+      "component": "accessories",
+      "description": "Create FreeCAD Python script for the USB hub dock (80x50x30mm) with dome top housing a USB hub",
+      "relatedFeature": "fortress-accessories-collection",
+      "subtasks": [
+        "Design dome housing profile",
+        "Create USB hub cavity (fits common 4-port hubs)",
+        "Add port access cutouts",
+        "Design crystal-themed base",
+        "Add cable exit channel"
+      ]
+    },
+    {
+      "id": "fortress-crown-design",
+      "title": "Design Fortress Crown Top Cap",
+      "status": "planned",
+      "priority": "medium",
+      "category": "feature",
+      "component": "accessories",
+      "description": "Create FreeCAD Python script for the ventilation top cap with 3 style options: spire, crystal cluster, and chimney",
+      "relatedFeature": "fortress-accessories-collection",
+      "subtasks": [
+        "Design spire variant (pointed exhaust cap)",
+        "Design crystal cluster variant (decorative vents)",
+        "Design chimney variant (maximized airflow)",
+        "Add press-fit or magnet attachment to shell",
+        "Test thermal performance of each variant"
+      ]
+    },
+    {
+      "id": "assembly-instructions",
+      "title": "Create Assembly Instructions",
+      "status": "planned",
+      "priority": "medium",
+      "category": "docs",
+      "description": "Write step-by-step assembly guide covering magnet insertion, component mounting, and cable routing",
+      "subtasks": [
+        "Document magnet polarity and insertion order",
+        "Photograph component stacking sequence",
+        "Write SSD and Ethernet clamp-in procedure",
+        "Document Pi 5 M2.5 screw mounting",
+        "Add cable routing recommendations"
+      ]
+    },
+    {
+      "id": "print-tolerance-testing",
+      "title": "Print Testing and Tolerance Validation",
+      "status": "in-progress",
+      "priority": "high",
+      "category": "testing",
+      "description": "Validate all STL files print correctly with proper tolerances, snap-fit engagement, and magnet press-fit",
+      "subtasks": [
+        "Print MainShell_Integrated at 0.2mm layer height",
+        "Verify panel fit with 0.25mm tolerance",
+        "Test magnet recess depth (1.5mm press-fit)",
+        "Validate snap-in clip engagement force",
+        "Check Pi 5 mount hole alignment (M2.5)"
+      ]
+    },
+    {
+      "id": "bug-hdmi-port-cutout",
+      "title": "HDMI port cutouts not rendering correctly on left panel",
+      "status": "open",
+      "priority": "high",
+      "category": "bug",
+      "component": "left-panel",
+      "description": "The dual micro-HDMI port cutouts on LeftPanel_ShieldArray are not rendering properly. The boolean cut operation for the HDMI openings may have incorrect dimensions or positioning, resulting in missing or malformed cutouts in the exported STL.",
+      "reference": "krypton_nas_panels.py (LeftPanel_ShieldArray)",
+      "subtasks": [
+        "Inspect HDMI cutout geometry in FreeCAD 3D view",
+        "Verify cutout dimensions match micro-HDMI spec (6.5 x 2.5mm)",
+        "Check boolean cut operation for panel thickness",
+        "Fix cutout positioning relative to Pi 5 port locations",
+        "Re-export LeftPanel_ShieldArray.stl"
+      ]
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "planned": 7,
+    "pending": 1,
+    "inProgress": 1,
+    "completed": 0,
+    "bugs": 1
+  }
+}

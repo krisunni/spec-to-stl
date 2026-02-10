@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><polygon points='16,2 28,12 22,30 10,30 4,12' fill='%234A9BD9' stroke='%23C8E6F0' stroke-width='2'/></svg>">
+    <title>Features - Krypton NAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #2d2d3a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+
+        .nav-links a {
+            padding: 10px 20px; background: var(--bg-secondary);
+            border: 1px solid var(--border-color); border-radius: 8px;
+            color: var(--text-secondary); text-decoration: none;
+            font-size: 0.9rem; transition: all 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: var(--accent-blue); color: white; border-color: var(--accent-blue);
+        }
+
+        .filter-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+
+        .filter-tab {
+            padding: 8px 16px; background: var(--bg-tertiary);
+            border: 1px solid var(--border-color); border-radius: 6px;
+            color: var(--text-secondary); cursor: pointer;
+            font-size: 0.85rem; transition: all 0.2s;
+        }
+
+        .filter-tab:hover, .filter-tab.active {
+            background: var(--accent-purple); color: white; border-color: var(--accent-purple);
+        }
+
+        .feature-card {
+            background: var(--bg-secondary); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 20px; margin-bottom: 15px;
+        }
+
+        .feature-header {
+            display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 10px;
+        }
+
+        .feature-title { font-size: 1.1rem; font-weight: 600; }
+
+        .status-badge {
+            font-size: 0.75rem; padding: 4px 10px;
+            border-radius: 4px; font-weight: 500;
+        }
+
+        .status-badge.completed { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        .status-badge.in-progress { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+        .status-badge.planned { background: rgba(139, 92, 246, 0.2); color: var(--accent-purple); }
+
+        .feature-description { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 15px; }
+
+        .progress-section { margin-bottom: 15px; }
+
+        .progress-bar {
+            height: 8px; background: var(--bg-tertiary);
+            border-radius: 4px; overflow: hidden; margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            transition: width 0.3s;
+        }
+
+        .progress-label { font-size: 0.85rem; color: var(--text-muted); }
+
+        .phase-list { list-style: none; font-size: 0.85rem; }
+
+        .phase-list li {
+            padding: 6px 0; border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: flex-start; gap: 8px;
+        }
+
+        .phase-list li:last-child { border-bottom: none; }
+
+        .phase-icon {
+            width: 16px; height: 16px; border-radius: 50%;
+            flex-shrink: 0; margin-top: 2px;
+        }
+
+        .phase-icon.completed { background: var(--accent-green); }
+        .phase-icon.current { background: var(--accent-blue); }
+        .phase-icon.pending { background: var(--bg-tertiary); border: 2px solid var(--border-color); }
+
+        .phase-text { color: var(--text-secondary); }
+        .phase-text.current { color: var(--text-primary); font-weight: 500; }
+
+        #loading { text-align: center; padding: 50px; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header><h1>Features</h1></header>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="overview.html">Overview</a>
+            <a href="components.html">Components</a>
+            <a href="features.html" class="active">Features</a>
+            <a href="tasks.html">Tasks</a>
+            <a href="changelog.html">Changelog</a>
+            <a href="glossary.html">Glossary</a>
+            <a href="spec-viewer.html">Spec Sheet</a>
+        </nav>
+
+        <p class="page-desc" style="color: var(--text-secondary); font-size: 1rem; margin-top: -22px; margin-bottom: 30px;">Feature roadmap with phase tracking and progress</p>
+
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All</button>
+            <button class="filter-tab" data-filter="in-progress">In Progress</button>
+            <button class="filter-tab" data-filter="completed">Completed</button>
+            <button class="filter-tab" data-filter="planned">Planned</button>
+        </div>
+
+        <div id="loading">Loading features...</div>
+        <div id="features-list" style="display: none;"></div>
+    </div>
+
+    <script>
+        let allFeatures = [];
+
+        async function loadFeatures() {
+            try {
+                const data = await fetch('../.state/features.json').then(r => r.json());
+                allFeatures = data.features;
+
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('features-list').style.display = 'block';
+
+                renderFeatures('all');
+
+                document.querySelectorAll('.filter-tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        renderFeatures(tab.dataset.filter);
+                    });
+                });
+
+            } catch (error) {
+                document.getElementById('loading').innerHTML = `
+                    <p style="color: var(--accent-red);">Error loading features: ${error.message}</p>
+                `;
+            }
+        }
+
+        function renderFeatures(filter) {
+            const list = document.getElementById('features-list');
+            list.innerHTML = '';
+
+            const filtered = filter === 'all'
+                ? allFeatures
+                : allFeatures.filter(f => f.status === filter);
+
+            if (filtered.length === 0) {
+                list.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 40px;">No ${filter} features</p>`;
+                return;
+            }
+
+            filtered.forEach(feature => {
+                const card = document.createElement('div');
+                card.className = 'feature-card';
+
+                const progress = feature.phase && feature.totalPhases
+                    ? Math.round((feature.phase / feature.totalPhases) * 100)
+                    : feature.status === 'completed' ? 100 : 0;
+
+                let phasesHtml = '';
+                if (feature.completedPhases || feature.currentPhase || feature.pendingPhases) {
+                    phasesHtml = '<ul class="phase-list">';
+
+                    if (feature.completedPhases) {
+                        feature.completedPhases.forEach(phase => {
+                            phasesHtml += `<li><span class="phase-icon completed"></span><span class="phase-text">${phase}</span></li>`;
+                        });
+                    }
+
+                    if (feature.currentPhase) {
+                        phasesHtml += `<li><span class="phase-icon current"></span><span class="phase-text current">${feature.currentPhase}</span></li>`;
+                    }
+
+                    if (feature.pendingPhases) {
+                        feature.pendingPhases.forEach(phase => {
+                            phasesHtml += `<li><span class="phase-icon pending"></span><span class="phase-text">${phase}</span></li>`;
+                        });
+                    }
+
+                    phasesHtml += '</ul>';
+                }
+
+                card.innerHTML = `
+                    <div class="feature-header">
+                        <span class="feature-title">${feature.name}</span>
+                        <span class="status-badge ${feature.status}">${feature.status}</span>
+                    </div>
+                    <p class="feature-description">${feature.description}</p>
+                    ${feature.phase && feature.totalPhases ? `
+                        <div class="progress-section">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progress}%"></div>
+                            </div>
+                            <span class="progress-label">Phase ${feature.phase} of ${feature.totalPhases} (${progress}%)</span>
+                        </div>
+                    ` : ''}
+                    ${phasesHtml}
+                `;
+
+                list.appendChild(card);
+            });
+        }
+
+        loadFeatures();
+    </script>
+    <footer style="margin-top:60px;padding:30px 20px;border-top:1px solid var(--border-color);text-align:center;font-size:11px;color:var(--text-muted);line-height:1.6;max-width:800px;margin-left:auto;margin-right:auto;">
+        <p style="margin-bottom:8px;"><strong style="color:var(--text-secondary);">Trademark Notice</strong></p>
+        <p>This is an independent fan project. It is not produced, endorsed, supported, or affiliated with DC Comics, Warner Bros. Discovery, or any of their subsidiaries or affiliates.</p>
+        <p style="margin-top:6px;">DC, DC Comics, Superman, Krypton, Fortress of Solitude, Phantom Zone, and all related characters, names, and indicia are trademarks of and &copy; DC Comics and/or Warner Bros. Discovery. Raspberry Pi is a trademark of Raspberry Pi Ltd. All other trademarks are the property of their respective owners.</p>
+        <p style="margin-top:12px;">
+            <a href="https://github.com/krisunni/spec-to-stl" target="_blank" rel="noopener" style="color:var(--text-muted);text-decoration:none;margin-right:16px;">GitHub</a>
+            <a href="https://linkedin.com/in/kunnikannan" target="_blank" rel="noopener" style="color:var(--text-muted);text-decoration:none;">LinkedIn</a>
+        </p>
+    </footer>
+</body>
+</html>

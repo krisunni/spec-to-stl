@@ -1,0 +1,201 @@
+{
+  "workflows": [
+    {
+      "id": "new-component-design",
+      "name": "New Component Design",
+      "description": "Workflow for designing and validating a new printable component",
+      "steps": [
+        {
+          "step": 1,
+          "name": "Define Specifications",
+          "description": "Document dimensions, constraints, and interface requirements",
+          "outputs": ["implementation-plans/{component-id}-impl.md"]
+        },
+        {
+          "step": 2,
+          "name": "Add to State Files",
+          "description": "Create component entry in .state/components.json, .state/spec.json, and related feature/task entries",
+          "outputs": [".state/components.json", ".state/spec.json", ".state/tasks.json"]
+        },
+        {
+          "step": 3,
+          "name": "Write FreeCAD Script",
+          "description": "Create parametric Python script with configurable dimensions",
+          "outputs": ["krypton_{component}.py"]
+        },
+        {
+          "step": 4,
+          "name": "Generate Model",
+          "description": "Run script in FreeCAD to generate 3D model",
+          "command": "/Applications/FreeCAD.app/Contents/MacOS/FreeCAD -c \"exec(open('krypton_{component}.py').read())\""
+        },
+        {
+          "step": 5,
+          "name": "Export STL",
+          "description": "Export mesh to STL for slicing",
+          "outputs": ["stl/{ComponentName}.stl"]
+        },
+        {
+          "step": 6,
+          "name": "Print Test",
+          "description": "Slice and print prototype, validate tolerances and fit"
+        },
+        {
+          "step": 7,
+          "name": "Update Changelog",
+          "description": "Document the new component in .state/changelog.json",
+          "outputs": [".state/changelog.json"]
+        }
+      ]
+    },
+    {
+      "id": "design-iteration",
+      "name": "Design Iteration",
+      "description": "Workflow for modifying an existing component after print testing",
+      "steps": [
+        {
+          "step": 1,
+          "name": "Document Issue",
+          "description": "Record what needs to change and why (tolerance, fit, aesthetics)"
+        },
+        {
+          "step": 2,
+          "name": "Update Parameters",
+          "description": "Modify the parametric Python script with adjusted values"
+        },
+        {
+          "step": 3,
+          "name": "Regenerate Model",
+          "description": "Run updated script in FreeCAD",
+          "command": "/Applications/FreeCAD.app/Contents/MacOS/FreeCAD -c \"exec(open('krypton_nas_panels.py').read())\""
+        },
+        {
+          "step": 4,
+          "name": "Re-export STL",
+          "description": "Export updated mesh to STL"
+        },
+        {
+          "step": 5,
+          "name": "Reprint and Validate",
+          "description": "Print updated component and verify fix"
+        },
+        {
+          "step": 6,
+          "name": "Update Changelog",
+          "description": "Add fix entry with description of what changed and why",
+          "outputs": [".state/changelog.json"],
+          "template": {
+            "type": "fix",
+            "component": "{component-id}",
+            "description": "Brief description",
+            "details": "ISSUE: ... FIX: ...",
+            "reference": "krypton_nas_panels.py:{line}"
+          }
+        },
+        {
+          "step": 7,
+          "name": "Bump Version",
+          "description": "Increment patch version in .state/system.json",
+          "outputs": [".state/system.json"]
+        }
+      ]
+    },
+    {
+      "id": "multicolor-export",
+      "name": "Multi-Color 3MF Export",
+      "description": "Spec-driven pipeline: generate model, assign colors from spec.json, export multi-color 3MF and individual STLs",
+      "steps": [
+        {
+          "step": 1,
+          "name": "Verify Spec",
+          "description": "Ensure .state/spec.json has correct color mappings and component list",
+          "inputs": [".state/spec.json"]
+        },
+        {
+          "step": 2,
+          "name": "Run Pipeline",
+          "description": "Execute the build script to generate model, assign colors, and export",
+          "command": "./pipeline/build.sh"
+        },
+        {
+          "step": 3,
+          "name": "Verify 3MF",
+          "description": "Open output/KryptonNAS_multicolor.3mf in PrusaSlicer or Bambu Studio, verify 8 colored bodies",
+          "outputs": ["output/KryptonNAS_multicolor.3mf"]
+        },
+        {
+          "step": 4,
+          "name": "Verify STLs",
+          "description": "Check stl/ directory for all individual component STLs",
+          "outputs": ["stl/*.stl"]
+        }
+      ]
+    },
+    {
+      "id": "stl-export",
+      "name": "STL Export",
+      "description": "Workflow for exporting print-ready STL files via the pipeline",
+      "steps": [
+        {
+          "step": 1,
+          "name": "Run Build Pipeline",
+          "description": "Execute the pipeline script which generates model and exports all STLs",
+          "command": "./pipeline/build.sh"
+        },
+        {
+          "step": 2,
+          "name": "Verify Individual Parts",
+          "description": "Check each STL: MainShell, 4 panels, 3 mounts"
+        },
+        {
+          "step": 3,
+          "name": "Verify Integrated Shell",
+          "description": "Check MainShell_Integrated.stl (shell + mounts fused)"
+        },
+        {
+          "step": 4,
+          "name": "Validate Meshes",
+          "description": "Check all STLs for manifold errors, non-planar faces, and minimum wall thickness"
+        }
+      ]
+    },
+    {
+      "id": "accessory-development",
+      "name": "Accessory Development",
+      "description": "Workflow for developing a new Fortress Collection accessory",
+      "steps": [
+        {
+          "step": 1,
+          "name": "Review Specification",
+          "description": "Read the accessory spec from KRYPTON_ACCESSORIES_PLAN.md"
+        },
+        {
+          "step": 2,
+          "name": "Create Script",
+          "description": "Write FreeCAD Python script following existing patterns from krypton_nas_panels.py"
+        },
+        {
+          "step": 3,
+          "name": "Generate and Export",
+          "description": "Run script, generate model, export STL to stl/ directory"
+        },
+        {
+          "step": 4,
+          "name": "Test Print",
+          "description": "Print at 0.2mm layer height, validate dimensions and aesthetics"
+        },
+        {
+          "step": 5,
+          "name": "Integration Test",
+          "description": "Verify accessory fits with main NAS case and other accessories"
+        },
+        {
+          "step": 6,
+          "name": "Update State",
+          "description": "Update task status, feature phase, and changelog",
+          "outputs": [".state/tasks.json", ".state/features.json", ".state/changelog.json"]
+        }
+      ]
+    }
+  ]
+}

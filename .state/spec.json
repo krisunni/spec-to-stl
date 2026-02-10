@@ -1,0 +1,170 @@
+{
+  "project": {
+    "name": "Krypton NAS",
+    "subtitle": "Fortress Spire",
+    "version": "2.0.0",
+    "units": "mm",
+    "description": "3D printable Raspberry Pi 5 NAS enclosure with DC Comics Krypton/Fortress of Solitude theme"
+  },
+  "colors": {
+    "krypton-ice": {
+      "hex": "#C8E6F0",
+      "rgb": [200, 230, 240],
+      "use": "Main shell body"
+    },
+    "fortress-silver": {
+      "hex": "#A8B8C8",
+      "rgb": [168, 184, 200],
+      "use": "Internal mounts"
+    },
+    "crystal-blue": {
+      "hex": "#4A9BD9",
+      "rgb": [74, 155, 217],
+      "use": "Front and rear panels"
+    },
+    "sunstone-gold": {
+      "hex": "#D4A848",
+      "rgb": [212, 168, 72],
+      "use": "Left panel (port side)"
+    },
+    "rao-red": {
+      "hex": "#C84040",
+      "rgb": [200, 64, 64],
+      "use": "Right panel (cable side)"
+    },
+    "phantom-purple": {
+      "hex": "#7B5EA7",
+      "rgb": [123, 94, 167],
+      "use": "Accent features"
+    }
+  },
+  "parameters": {
+    "base_x": 140,
+    "base_y": 100,
+    "height": 160,
+    "taper": 0.85,
+    "top_x": 119,
+    "top_y": 85,
+    "wall": 2.8,
+    "floor": 3.0,
+    "tolerance": 0.3,
+    "panel_thick": 2.5,
+    "lip_width": 5.0,
+    "lip_depth": 2.5,
+    "magnet_diameter": 6.0,
+    "magnet_height": 2.0,
+    "magnet_recess": 1.5,
+    "panel_margin": 15,
+    "panel_bottom": 15,
+    "panel_top_margin": 25,
+    "panel_height": 120
+  },
+  "components": [
+    {
+      "id": "main-shell",
+      "name": "Main Shell",
+      "freecad_object": "MainShell",
+      "stl": "stl/MainShell.stl",
+      "color": "krypton-ice",
+      "type": "enclosure",
+      "dimensions": { "base": "140 x 100", "height": 160, "wall": 2.8, "floor": 3.0 },
+      "print": { "orientation": "opening-up", "supports": false, "layer_height": 0.2, "infill": "15%", "material": "PETG" }
+    },
+    {
+      "id": "front-panel",
+      "name": "Front Panel - Crystal Burst",
+      "freecad_object": "FrontPanel_CrystalBurst",
+      "stl": "stl/FrontPanel_CrystalBurst.stl",
+      "color": "crystal-blue",
+      "type": "panel",
+      "dimensions": { "height": 120, "thickness": 2.5 },
+      "print": { "orientation": "pattern-up", "supports": false, "layer_height": 0.2, "infill": "100%", "material": "PLA" }
+    },
+    {
+      "id": "rear-panel",
+      "name": "Rear Panel - Fortress Gate",
+      "freecad_object": "RearPanel_FortressGate",
+      "stl": "stl/RearPanel_FortressGate.stl",
+      "color": "crystal-blue",
+      "type": "panel",
+      "dimensions": { "height": 120, "thickness": 2.5 },
+      "print": { "orientation": "pattern-up", "supports": false, "layer_height": 0.2, "infill": "100%", "material": "PLA" }
+    },
+    {
+      "id": "left-panel",
+      "name": "Left Panel - Shield Array",
+      "freecad_object": "LeftPanel_ShieldArray",
+      "stl": "stl/LeftPanel_ShieldArray.stl",
+      "color": "sunstone-gold",
+      "type": "panel",
+      "dimensions": { "height": 120, "thickness": 2.5 },
+      "print": { "orientation": "pattern-up", "supports": false, "layer_height": 0.2, "infill": "100%", "material": "PLA" }
+    },
+    {
+      "id": "right-panel",
+      "name": "Right Panel - Crystal Wave",
+      "freecad_object": "RightPanel_CrystalWave",
+      "stl": "stl/RightPanel_CrystalWave.stl",
+      "color": "rao-red",
+      "type": "panel",
+      "dimensions": { "height": 120, "thickness": 2.5 },
+      "print": { "orientation": "pattern-up", "supports": false, "layer_height": 0.2, "infill": "100%", "material": "PLA" }
+    },
+    {
+      "id": "ssd-mount",
+      "name": "SSD Clamp Mount",
+      "freecad_object": "SSD_ClampMount",
+      "stl": "stl/SSD_ClampMount.stl",
+      "color": "fortress-silver",
+      "type": "mount",
+      "dimensions": { "fits": "125 x 41 x 14", "z_position": 3 },
+      "print": { "orientation": "flat", "supports": false, "layer_height": 0.2, "infill": "30%", "material": "PETG" }
+    },
+    {
+      "id": "ethernet-mount",
+      "name": "Ethernet Clamp Mount",
+      "freecad_object": "Ethernet_ClampMount",
+      "stl": "stl/Ethernet_ClampMount.stl",
+      "color": "fortress-silver",
+      "type": "mount",
+      "dimensions": { "fits": "62 x 25 x 15", "z_position": 35 },
+      "print": { "orientation": "flat", "supports": false, "layer_height": 0.2, "infill": "30%", "material": "PETG" }
+    },
+    {
+      "id": "pi5-mount",
+      "name": "Raspberry Pi 5 Mount",
+      "freecad_object": "Pi5_Mount",
+      "stl": "stl/Pi5_Mount.stl",
+      "color": "fortress-silver",
+      "type": "mount",
+      "dimensions": { "board": "85 x 56", "holes": "M2.5", "z_position": 65, "board_surface": 73 },
+      "print": { "orientation": "flat", "supports": false, "layer_height": 0.2, "infill": "30%", "material": "PETG" }
+    }
+  ],
+  "hardware": [
+    { "item": "Neodymium magnets", "spec": "6mm dia x 2mm", "quantity": 48, "note": "24 in shell + 24 in panels (6 per side x 2)" },
+    { "item": "M2.5 x 6mm screws", "spec": "Phillips pan head", "quantity": 4, "note": "Pi 5 mounting" },
+    { "item": "Raspberry Pi 5", "spec": "Any RAM variant", "quantity": 1, "note": "85 x 56mm board" },
+    { "item": "UGREEN M.2 SSD Enclosure", "spec": "USB-C, 125 x 41 x 14mm", "quantity": 1, "note": "NVMe or SATA" },
+    { "item": "UGREEN USB-C Ethernet Adapter", "spec": "Gigabit, 62 x 25 x 15mm", "quantity": 1, "note": "USB-C to RJ45" },
+    { "item": "USB-C power supply", "spec": "5V 5A (27W PD)", "quantity": 1, "note": "Official Pi 5 PSU recommended" },
+    { "item": "USB 3.0 cable", "spec": "USB-A to USB-C, short", "quantity": 1, "note": "SSD to Pi 5" },
+    { "item": "Ethernet cable", "spec": "Cat5e/Cat6, short", "quantity": 1, "note": "Adapter to router/switch" }
+  ],
+  "assembly": {
+    "stack_order": [
+      "SSD Clamp Mount (z=3mm) - snap SSD enclosure into rails",
+      "Ethernet Clamp Mount (z=35mm) - snap adapter into cradle",
+      "Pi 5 Mount (z=65mm) - secure with 4x M2.5 screws",
+      "Route cables: USB-C power, USB 3.0 to SSD, Ethernet",
+      "Attach panels: front, rear, left, right (magnets self-align)"
+    ],
+    "notes": [
+      "Insert magnets before assembly - observe polarity (opposite poles in shell vs panel)",
+      "Shell prints opening-up, no supports needed",
+      "Panels print flat with pattern facing up",
+      "Test-fit panels before gluing magnets - adjust tolerance if needed",
+      "Cable routing: power enters bottom-left, SSD cable exits right side"
+    ]
+  }
+}

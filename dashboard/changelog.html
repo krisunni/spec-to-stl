@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><polygon points='16,2 28,12 22,30 10,30 4,12' fill='%234A9BD9' stroke='%23C8E6F0' stroke-width='2'/></svg>">
+    <title>Changelog - Krypton NAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #2d2d3a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+
+        .nav-links a {
+            padding: 10px 20px; background: var(--bg-secondary);
+            border: 1px solid var(--border-color); border-radius: 8px;
+            color: var(--text-secondary); text-decoration: none;
+            font-size: 0.9rem; transition: all 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: var(--accent-blue); color: white; border-color: var(--accent-blue);
+        }
+
+        .version-card {
+            background: var(--bg-secondary); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 25px; margin-bottom: 20px;
+        }
+
+        .version-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 15px; padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .version-title { display: flex; align-items: center; gap: 15px; }
+        .version-number { font-size: 1.3rem; font-weight: 700; color: var(--accent-blue); }
+        .version-date { font-size: 0.9rem; color: var(--text-muted); }
+
+        .status-badge {
+            font-size: 0.75rem; padding: 4px 10px;
+            border-radius: 4px; font-weight: 500;
+        }
+
+        .status-badge.released { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        .status-badge.in-progress { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+
+        .version-highlight {
+            background: var(--bg-tertiary); padding: 12px 15px;
+            border-radius: 6px; margin-bottom: 20px;
+            font-size: 0.95rem; border-left: 3px solid var(--accent-purple);
+        }
+
+        .changes-list { list-style: none; }
+
+        .change-item {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .change-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+        .change-header {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 5px;
+        }
+
+        .change-type {
+            font-size: 0.7rem; padding: 3px 8px; border-radius: 4px;
+            text-transform: uppercase; font-weight: 600;
+        }
+
+        .change-type.feature { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        .change-type.fix { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+        .change-type.refactor { background: rgba(139, 92, 246, 0.2); color: var(--accent-purple); }
+        .change-type.docs { background: rgba(100, 116, 139, 0.2); color: var(--text-muted); }
+
+        .change-component { font-size: 0.8rem; color: var(--text-muted); }
+        .change-description { font-size: 0.95rem; color: var(--text-primary); margin-bottom: 5px; }
+        .change-details { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+        .change-reference {
+            font-size: 0.8rem; color: var(--accent-cyan);
+            font-family: 'Courier New', monospace; margin-top: 5px;
+        }
+
+        #loading { text-align: center; padding: 50px; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header><h1>Changelog</h1></header>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="overview.html">Overview</a>
+            <a href="components.html">Components</a>
+            <a href="features.html">Features</a>
+            <a href="tasks.html">Tasks</a>
+            <a href="changelog.html" class="active">Changelog</a>
+            <a href="glossary.html">Glossary</a>
+            <a href="spec-viewer.html">Spec Sheet</a>
+        </nav>
+
+        <p class="page-desc" style="color: var(--text-secondary); font-size: 1rem; margin-top: -22px; margin-bottom: 30px;">Version history and detailed change log</p>
+
+        <div id="loading">Loading changelog...</div>
+        <div id="changelog-list" style="display: none;"></div>
+    </div>
+
+    <script>
+        async function loadChangelog() {
+            try {
+                const data = await fetch('../.state/changelog.json').then(r => r.json());
+
+                document.getElementById('loading').style.display = 'none';
+                const list = document.getElementById('changelog-list');
+                list.style.display = 'block';
+
+                data.versions.forEach(version => {
+                    const card = document.createElement('div');
+                    card.className = 'version-card';
+
+                    card.innerHTML = `
+                        <div class="version-header">
+                            <div class="version-title">
+                                <span class="version-number">${version.version}</span>
+                                <span class="version-date">${version.date}</span>
+                            </div>
+                            <span class="status-badge ${version.status}">${version.status}</span>
+                        </div>
+                        ${version.highlight ? `<div class="version-highlight">${version.highlight}</div>` : ''}
+                        <ul class="changes-list">
+                            ${version.changes.map(change => `
+                                <li class="change-item">
+                                    <div class="change-header">
+                                        <span class="change-type ${change.type}">${change.type}</span>
+                                        ${change.component ? `<span class="change-component">${change.component}</span>` : ''}
+                                    </div>
+                                    <div class="change-description">${change.description}</div>
+                                    ${change.details ? `<div class="change-details">${change.details}</div>` : ''}
+                                    ${change.reference ? `<div class="change-reference">${change.reference}</div>` : ''}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    `;
+
+                    list.appendChild(card);
+                });
+
+            } catch (error) {
+                document.getElementById('loading').innerHTML = `
+                    <p style="color: var(--accent-red);">Error loading changelog: ${error.message}</p>
+                `;
+            }
+        }
+
+        loadChangelog();
+    </script>
+    <footer style="margin-top:60px;padding:30px 20px;border-top:1px solid var(--border-color);text-align:center;font-size:11px;color:var(--text-muted);line-height:1.6;max-width:800px;margin-left:auto;margin-right:auto;">
+        <p style="margin-bottom:8px;"><strong style="color:var(--text-secondary);">Trademark Notice</strong></p>
+        <p>This is an independent fan project. It is not produced, endorsed, supported, or affiliated with DC Comics, Warner Bros. Discovery, or any of their subsidiaries or affiliates.</p>
+        <p style="margin-top:6px;">DC, DC Comics, Superman, Krypton, Fortress of Solitude, Phantom Zone, and all related characters, names, and indicia are trademarks of and &copy; DC Comics and/or Warner Bros. Discovery. Raspberry Pi is a trademark of Raspberry Pi Ltd. All other trademarks are the property of their respective owners.</p>
+        <p style="margin-top:12px;">
+            <a href="https://github.com/krisunni/spec-to-stl" target="_blank" rel="noopener" style="color:var(--text-muted);text-decoration:none;margin-right:16px;">GitHub</a>
+            <a href="https://linkedin.com/in/kunnikannan" target="_blank" rel="noopener" style="color:var(--text-muted);text-decoration:none;">LinkedIn</a>
+        </p>
+    </footer>
+</body>
+</html>

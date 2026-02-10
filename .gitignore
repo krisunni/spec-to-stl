@@ -1,0 +1,44 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# SMB/network artifacts
+.smbdelete*
+.smb*
+.Trashes
+.Spotlight-V100
+.fseventsd
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+dist/
+build/
+.env
+.venv/
+
+# FreeCAD
+*.FCBak
+*.FCStd1
+_temp_template.svg
+
+# Build pipeline output
+output/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Claude local settings
+.claude/
+
+# Thumbnails
+Thumbs.db

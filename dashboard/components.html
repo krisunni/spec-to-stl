@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><polygon points='16,2 28,12 22,30 10,30 4,12' fill='%234A9BD9' stroke='%23C8E6F0' stroke-width='2'/></svg>">
+    <title>Components - Krypton NAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #2d2d3a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .status-badge.operational { background: rgba(16, 185, 129, 0.2); color: var(--accent-green); }
+        .status-badge.pending { background: rgba(245, 158, 11, 0.2); color: var(--accent-orange); }
+        .status-badge.error { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+
+        .card-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+        }
+
+        .meta-item {
+            color: var(--text-muted);
+        }
+
+        .meta-item strong {
+            color: var(--text-secondary);
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 6px 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li::before {
+            content: "\2022";
+            color: var(--accent-blue);
+            margin-right: 8px;
+        }
+
+        #loading {
+            text-align: center;
+            padding: 50px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Components</h1>
+        </header>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="overview.html">Overview</a>
+            <a href="components.html" class="active">Components</a>
+            <a href="features.html">Features</a>
+            <a href="tasks.html">Tasks</a>
+            <a href="changelog.html">Changelog</a>
+            <a href="glossary.html">Glossary</a>
+            <a href="spec-viewer.html">Spec Sheet</a>
+        </nav>
+
+        <p class="page-desc" style="color: var(--text-secondary); font-size: 1rem; margin-top: -22px; margin-bottom: 30px;">8 printable parts with dimensions, materials, and print settings</p>
+
+        <div id="loading">Loading components...</div>
+        <div class="grid" id="components-grid" style="display: none;"></div>
+    </div>
+
+    <script>
+        async function loadComponents() {
+            try {
+                const components = await fetch('../.state/components.json').then(r => r.json());
+
+                document.getElementById('loading').style.display = 'none';
+                const grid = document.getElementById('components-grid');
+                grid.style.display = 'grid';
+
+                components.components.forEach(comp => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+
+                    const dimsStr = comp.dimensions ? Object.entries(comp.dimensions)
+                        .map(([k, v]) => `${k}: ${v}`)
+                        .join(', ') : '';
+
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <span class="card-title">${comp.name}</span>
+                            <span class="status-badge ${comp.status}">${comp.status}</span>
+                        </div>
+                        <p class="card-description">${comp.description}</p>
+                        <div class="card-meta">
+                            <span class="meta-item"><strong>Version:</strong> ${comp.version}</span>
+                            <span class="meta-item"><strong>Type:</strong> ${comp.type}</span>
+                        </div>
+                        ${comp.stl ? `<div class="card-meta"><span class="meta-item"><strong>STL:</strong> ${comp.stl}</span></div>` : ''}
+                        ${comp.features && comp.features.length > 0 ? `
+                            <ul class="feature-list">
+                                ${comp.features.map(f => `<li>${f}</li>`).join('')}
+                            </ul>
+                        ` : ''}
+                    `;
+                    grid.appendChild(card);
+                });
+
+            } catch (error) {
+                document.getElementById('loading').innerHTML = `
+                    <p style="color: var(--accent-red);">Error loading components: ${error.message}</p>
+                `;
+            }
+        }
+
+        loadComponents();
+    </script>
+    <footer style="margin-top:60px;padding:30px 20px;border-top:1px solid var(--border-color);text-align:center;font-size:11px;color:var(--text-muted);line-height:1.6;max-width:800px;margin-left:auto;margin-right:auto;">
+        <p style="margin-bottom:8px;"><strong style="color:var(--text-secondary);">Trademark Notice</strong></p>
+        <p>This is an independent fan project. It is not produced, endorsed, supported, or affiliated with DC Comics, Warner Bros. Discovery, or any of their subsidiaries or affiliates.</p>
+        <p style="margin-top:6px;">DC, DC Comics, Superman, Krypton, Fortress of Solitude, Phantom Zone, and all related characters, names, and indicia are trademarks of and &copy; DC Comics and/or Warner Bros. Discovery. Raspberry Pi is a trademark of Raspberry Pi Ltd. All other trademarks are the property of their respective owners.</p>
+        <p style="margin-top:12px;">
+            <a href="https://github.com/krisunni/spec-to-stl" target="_blank" rel="noopener" style="color:var(--text-muted);text-decoration:none;margin-right:16px;">GitHub</a>
+            <a href="https://linkedin.com/in/kunnikannan" target="_blank" rel="noopener" style="color:var(--text-muted);text-decoration:none;">LinkedIn</a>
+        </p>
+    </footer>
+</body>
+</html>

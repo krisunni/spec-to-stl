@@ -1,0 +1,202 @@
+{
+  "components": [
+    {
+      "id": "main-shell",
+      "name": "Main Shell",
+      "version": "1.0.0",
+      "status": "operational",
+      "type": "enclosure",
+      "description": "Tapered case body with panel openings, magnet recesses, and integrated internal component mounts",
+      "documentation": "/components/main-shell.md",
+      "features": [
+        "Tapered loft geometry (140x100mm base, 85% taper)",
+        "Panel openings on all 4 sides",
+        "24 magnet recesses (6 per side, 6mm x 2mm)",
+        "Integrated SSD, Ethernet, and Pi5 mounts"
+      ],
+      "dimensions": {
+        "base": "140 x 100 mm",
+        "height": "160 mm",
+        "wall": "2.8 mm",
+        "floor": "3.0 mm"
+      },
+      "stl": "stl/MainShell.stl",
+      "color": "krypton-ice",
+      "print": {
+        "orientation": "opening-up",
+        "supports": false,
+        "layer_height": "0.2 mm",
+        "infill": "15%",
+        "material": "PETG"
+      }
+    },
+    {
+      "id": "front-panel",
+      "name": "Front Panel - Crystal Burst",
+      "version": "1.0.0",
+      "status": "operational",
+      "type": "panel",
+      "description": "Removable magnetic panel with radial diamond pattern inspired by crystal energy burst",
+      "documentation": "/components/decorative-panels.md",
+      "features": [
+        "Central diamond focal point",
+        "3 radiating rings of crystal shapes",
+        "6 embedded magnet slots",
+        "2.5mm thick with 5mm lip"
+      ],
+      "stl": "stl/FrontPanel_CrystalBurst.stl",
+      "color": "crystal-blue",
+      "print": {
+        "orientation": "pattern-up",
+        "supports": false,
+        "layer_height": "0.2 mm",
+        "infill": "100%",
+        "material": "PLA"
+      }
+    },
+    {
+      "id": "rear-panel",
+      "name": "Rear Panel - Fortress Gate",
+      "version": "1.0.0",
+      "status": "operational",
+      "type": "panel",
+      "description": "Removable magnetic panel with hex matrix and crystal slot ventilation pattern",
+      "documentation": "/components/decorative-panels.md",
+      "features": [
+        "Top crystal slot vents for exhaust",
+        "Hexagonal grid matrix pattern",
+        "Bottom diamond accents",
+        "RJ45 Ethernet passthrough cutout"
+      ],
+      "stl": "stl/RearPanel_FortressGate.stl",
+      "color": "crystal-blue",
+      "print": {
+        "orientation": "pattern-up",
+        "supports": false,
+        "layer_height": "0.2 mm",
+        "infill": "100%",
+        "material": "PLA"
+      }
+    },
+    {
+      "id": "left-panel",
+      "name": "Left Panel - Shield Array",
+      "version": "1.0.0",
+      "status": "operational",
+      "type": "panel",
+      "description": "Removable magnetic panel with shield tessellation and Raspberry Pi port cutouts",
+      "documentation": "/components/decorative-panels.md",
+      "features": [
+        "Shield-shaped tessellation pattern",
+        "USB-C power port cutout",
+        "Dual micro-HDMI cutouts",
+        "Ethernet jack cutout"
+      ],
+      "stl": "stl/LeftPanel_ShieldArray.stl",
+      "color": "sunstone-gold",
+      "print": {
+        "orientation": "pattern-up",
+        "supports": false,
+        "layer_height": "0.2 mm",
+        "infill": "100%",
+        "material": "PLA"
+      }
+    },
+    {
+      "id": "right-panel",
+      "name": "Right Panel - Crystal Wave",
+      "version": "1.0.0",
+      "status": "operational",
+      "type": "panel",
+      "description": "Removable magnetic panel with sinusoidal wave pattern and cable management exits",
+      "documentation": "/components/decorative-panels.md",
+      "features": [
+        "Sinusoidal wave with diamond nodes",
+        "USB 3.0 passthrough cutout",
+        "Ethernet adapter cutout",
+        "SSD cable exit slot"
+      ],
+      "stl": "stl/RightPanel_CrystalWave.stl",
+      "color": "rao-red",
+      "print": {
+        "orientation": "pattern-up",
+        "supports": false,
+        "layer_height": "0.2 mm",
+        "infill": "100%",
+        "material": "PLA"
+      }
+    },
+    {
+      "id": "ssd-mount",
+      "name": "SSD Clamp Mount",
+      "version": "1.0.0",
+      "status": "operational",
+      "type": "mount",
+      "description": "Snap-in rails for UGREEN M.2 SSD enclosure at base of case (z=3mm)",
+      "documentation": "/components/internal-mounts.md",
+      "features": [
+        "Tool-free snap-in retention clips",
+        "Sized for 125 x 41 x 14mm enclosure",
+        "4 snap-in clips for secure hold",
+        "Ventilation clearance underneath"
+      ],
+      "stl": "stl/SSD_ClampMount.stl",
+      "color": "fortress-silver",
+      "print": {
+        "orientation": "flat",
+        "supports": false,
+        "layer_height": "0.2 mm",
+        "infill": "30%",
+        "material": "PETG"
+      }
+    },
+    {
+      "id": "ethernet-mount",
+      "name": "Ethernet Clamp Mount",
+      "version": "1.0.0",
+      "status": "operational",
+      "type": "mount",
+      "description": "U-cradle with retention clips for UGREEN USB-C Ethernet adapter at z=35mm",
+      "documentation": "/components/internal-mounts.md",
+      "features": [
+        "U-shaped cradle profile",
+        "Retention clips for 62 x 25 x 15mm adapter",
+        "Tool-free snap-in design",
+        "Cable routing clearance"
+      ],
+      "stl": "stl/Ethernet_ClampMount.stl",
+      "color": "fortress-silver",
+      "print": {
+        "orientation": "flat",
+        "supports": false,
+        "layer_height": "0.2 mm",
+        "infill": "30%",
+        "material": "PETG"
+      }
+    },
+    {
+      "id": "pi5-mount",
+      "name": "Raspberry Pi 5 Mount",
+      "version": "1.0.0",
+      "status": "operational",
+      "type": "mount",
+      "description": "4 corner mounting posts with M2.5 screw holes for Raspberry Pi 5 at z=65mm",
+      "documentation": "/components/internal-mounts.md",
+      "features": [
+        "4 corner posts matching Pi 5 hole pattern (85 x 56mm)",
+        "M2.5 threaded screw holes",
+        "Airflow platform with ventilation slots",
+        "Board sits at z=73mm with 8mm standoff"
+      ],
+      "stl": "stl/Pi5_Mount.stl",
+      "color": "fortress-silver",
+      "print": {
+        "orientation": "flat",
+        "supports": false,
+        "layer_height": "0.2 mm",
+        "infill": "30%",
+        "material": "PETG"
+      }
+    }
+  ]
+}

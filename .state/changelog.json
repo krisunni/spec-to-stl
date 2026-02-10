@@ -1,0 +1,158 @@
+{
+  "versions": [
+    {
+      "version": "2.0.0",
+      "date": "2026-02-09",
+      "status": "released",
+      "highlight": "Spec-Driven Pipeline & Fortress Accessories",
+      "changes": [
+        {
+          "type": "feature",
+          "component": "tooling",
+          "description": "Spec-driven multi-color 3MF export pipeline",
+          "details": "Automated pipeline with .state/spec.json as single source of truth. FreeCAD headless script assigns per-body colors and exports multi-color 3MF plus individual STLs.",
+          "reference": "pipeline/export_3mf.py"
+        },
+        {
+          "type": "feature",
+          "component": "tooling",
+          "description": "Three.js web-based spec viewer",
+          "details": "Interactive spec sheet with Three.js 3D viewer, exploded view with component selector, orbit controls, color palette legend, engineering data cards, hardware BOM, and print settings. Replaces TechDraw renderer.",
+          "reference": "dashboard/spec-viewer.html"
+        },
+        {
+          "type": "feature",
+          "component": "project",
+          "description": "Master spec file as single source of truth",
+          "details": "Centralized .state/spec.json with color palette (6 Krypton-themed colors), parametric dimensions, component-to-color mappings, hardware BOM, and assembly instructions.",
+          "reference": ".state/spec.json"
+        },
+        {
+          "type": "feature",
+          "component": "accessories",
+          "description": "Fortress Accessories Collection planning",
+          "details": "Completed design specifications for 7 desk accessories: Argo Pedestal, Rao's Halo, Sunstone Shards, Phantom Zone Conduit, House Crest, Kandor Station, and Fortress Crown.",
+          "reference": "implementation-plans/fortress-accessories-spec.md"
+        },
+        {
+          "type": "docs",
+          "component": "project",
+          "description": "Added spec-driven development structure",
+          "details": "Refactored repository with .state/ JSON files, interactive HTML dashboards, structured documentation, and Claude AI navigation guide."
+        },
+        {
+          "type": "removed",
+          "component": "tooling",
+          "description": "Removed TechDraw spec sheet renderer",
+          "details": "Superseded by Three.js spec viewer. Deleted render_spec_sheet.py, blueprint_template_a3.svg, and generated SVG/DXF outputs."
+        },
+        {
+          "type": "fix",
+          "component": "main-shell",
+          "description": "Separated bare shell from integrated shell",
+          "details": "MainShell.stl is now the bare hollow shell (no mounts fused). MainShell_Integrated.stl remains available as a single-piece alternative with SSD, Ethernet, and Pi5 mounts fused in.",
+          "reference": ".state/spec.json"
+        },
+        {
+          "type": "chore",
+          "component": "project",
+          "description": "Repository cleanup",
+          "details": "Removed orphaned files: KryptonNAS_SpecSheet.FCStd, stale __pycache__, Post.html draft, empty directories. Cleaned .gitignore."
+        },
+        {
+          "type": "bug",
+          "component": "left-panel",
+          "description": "HDMI port cutouts not rendering correctly",
+          "details": "Dual micro-HDMI cutouts on LeftPanel_ShieldArray have incorrect geometry or positioning. Boolean cut may be malformed.",
+          "reference": "krypton_nas_panels.py"
+        }
+      ]
+    },
+    {
+      "version": "1.0.0",
+      "date": "2026-02-02",
+      "status": "released",
+      "highlight": "Initial release - Complete Krypton NAS enclosure",
+      "changes": [
+        {
+          "type": "feature",
+          "component": "main-shell",
+          "description": "Tapered enclosure with integrated mounts",
+          "details": "140x100mm base, 160mm height, 85% taper. Integrated SSD clamp mount (z=3mm), Ethernet cradle (z=35mm), and Pi 5 posts (z=65mm). 24 magnet recesses for removable panels.",
+          "reference": "krypton_nas_panels.py:632"
+        },
+        {
+          "type": "feature",
+          "component": "front-panel",
+          "description": "Crystal Burst decorative panel",
+          "details": "Radial diamond pattern with central focal point and 3 expanding rings. 6 embedded magnet slots.",
+          "reference": "krypton_nas_panels.py:877"
+        },
+        {
+          "type": "feature",
+          "component": "rear-panel",
+          "description": "Fortress Gate decorative panel",
+          "details": "Hex matrix pattern with crystal slot vents at top and diamond accents at bottom. RJ45 passthrough cutout.",
+          "reference": "krypton_nas_panels.py:980"
+        },
+        {
+          "type": "feature",
+          "component": "left-panel",
+          "description": "Shield Array decorative panel",
+          "details": "Shield tessellation pattern with cutouts for USB-C power, dual micro-HDMI, and Ethernet jack.",
+          "reference": "krypton_nas_panels.py:1100"
+        },
+        {
+          "type": "feature",
+          "component": "right-panel",
+          "description": "Crystal Wave decorative panel",
+          "details": "Sinusoidal wave with diamond nodes. Cutouts for USB 3.0, Ethernet adapter, and SSD cable exit.",
+          "reference": "krypton_nas_panels.py:1210"
+        },
+        {
+          "type": "feature",
+          "component": "ssd-mount",
+          "description": "SSD snap-in clamp mount",
+          "details": "Rails with 4 snap-in retention clips for UGREEN M.2 enclosure (125x41x14mm). Tool-free installation at z=3mm.",
+          "reference": "krypton_nas_panels.py:324"
+        },
+        {
+          "type": "feature",
+          "component": "ethernet-mount",
+          "description": "Ethernet adapter clamp mount",
+          "details": "U-cradle with retention clips for UGREEN USB-C adapter (62x25x15mm). Positioned at z=35mm.",
+          "reference": "krypton_nas_panels.py:450"
+        },
+        {
+          "type": "feature",
+          "component": "pi5-mount",
+          "description": "Raspberry Pi 5 mounting platform",
+          "details": "4 corner posts matching Pi 5 hole pattern (85x56mm) with M2.5 threaded holes. Airflow platform at z=65mm, board surface at z=73mm.",
+          "reference": "krypton_nas_panels.py:540"
+        }
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "date": "2026-01-15",
+      "status": "released",
+      "highlight": "Original OpenSCAD design",
+      "changes": [
+        {
+          "type": "feature",
+          "component": "openscad",
+          "description": "Fortress Spire design (Version 1)",
+          "details": "Vertical tapered tower with hex grid vents, removable side panel (friction fit), peaked lid with chimney exhaust, and Krypton-themed glyphs.",
+          "reference": "PiNasCase.scad:136"
+        },
+        {
+          "type": "feature",
+          "component": "openscad",
+          "description": "Crystal Shard design (Version 2)",
+          "details": "Angular wedge design (200x100mm) with front-to-rear slope. Convection-driven cooling with arrow vents indicating airflow direction.",
+          "reference": "PiNasCase.scad:679"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><polygon points='16,2 28,12 22,30 10,30 4,12' fill='%234A9BD9' stroke='%23C8E6F0' stroke-width='2'/></svg>">
+    <title>Spec Sheet - Krypton NAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a25;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #2d2d3a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container { max-width: 1400px; margin: 0 auto; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--accent-cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        /* Single viewport */
+        .viewer-section {
+            margin-bottom: 30px;
+        }
+
+        .viewport-main {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            height: 500px;
+        }
+
+        .viewport-main canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .viewport-label {
+            position: absolute;
+            top: 12px;
+            left: 16px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Component selector buttons */
+        .comp-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .comp-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .comp-btn:hover {
+            border-color: var(--accent-cyan);
+            color: var(--text-primary);
+        }
+
+        .comp-btn.active {
+            background: var(--accent-cyan);
+            color: white;
+            border-color: var(--accent-cyan);
+        }
+
+        .comp-btn .swatch {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Color legend row */
+        .legend-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .legend-swatch {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            border: 1px solid rgba(255,255,255,0.15);
+            flex-shrink: 0;
+        }
+
+        /* Data cards */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .data-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .data-card-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(45,45,58,0.5);
+        }
+
+        .data-row:last-child { border-bottom: none; }
+        .data-key { color: var(--text-muted); }
+        .data-value { color: var(--text-secondary); font-weight: 500; text-align: right; }
+
+        .component-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(45,45,58,0.5);
+        }
+
+        .component-row:last-child { border-bottom: none; }
+        .component-name { color: var(--text-secondary); }
+
+        .component-color {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .component-swatch {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .component-z { color: var(--text-muted); font-size: 0.8rem; }
+
+        .hardware-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(45,45,58,0.5);
+        }
+
+        .hardware-row:last-child { border-bottom: none; }
+        .hardware-item { color: var(--text-secondary); flex: 1; }
+        .hardware-spec { color: var(--text-muted); flex: 1; text-align: center; }
+        .hardware-qty { color: var(--accent-cyan); width: 30px; text-align: right; font-weight: 600; }
+
+        /* Title block */
+        .title-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+
+        .title-block-left {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .title-block-project {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+        }
+
+        .title-block-meta { color: var(--text-muted); }
+        .title-block-meta strong { color: var(--text-secondary); }
+
+        #loading {
+            text-align: center;
+            padding: 50px;
+            color: var(--text-muted);
+        }
+
+        #error-msg {
+            text-align: center;
+            padding: 30px;
+            color: var(--accent-red);
+            display: none;
+        }
+
+        .fallback-msg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .fallback-msg .hint {
+            font-size: 0.75rem;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Spec Sheet</h1>
+        </header>
+
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="overview.html">Overview</a>
+            <a href="components.html">Components</a>
+            <a href="features.html">Features</a>
+            <a href="tasks.html">Tasks</a>
+            <a href="changelog.html">Changelog</a>
+            <a href="glossary.html">Glossary</a>
+            <a href="spec-viewer.html" class="active">Spec Sheet</a>
+        </nav>
+
+        <p class="page-desc" style="color: var(--text-secondary); font-size: 1rem; margin-top: -22px; margin-bottom: 30px;">Interactive 3D exploded view with engineering data</p>
+
+        <div id="loading">Loading spec data...</div>
+        <div id="error-msg"></div>
+
+        <div id="main-content" style="display: none;">
+            <div class="viewer-section">
+                <div class="viewport-main" id="vp-main">
+                    <span class="viewport-label" id="vp-label">Exploded View</span>
+                </div>
+                <div class="comp-buttons" id="comp-buttons"></div>
+                <div class="legend-row" id="color-legend"></div>
+            </div>
+
+            <div class="data-grid" id="data-grid"></div>
+            <div class="title-block" id="title-block"></div>
+        </div>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+
+        let spec = null;
+        let scene, camera, renderer, controls;
+
+        // Each loaded component: { id, mesh, color, bbox }
+        let components = [];
+        let activeView = 'exploded'; // 'exploded' or a component id
+
+        // Exploded view offsets (Three.js Y-up coords)
+        // Panels pull outward from shell center; mounts drop below
+        const EXPLODED = {
+            'main-shell':      { x: 0,    y: 0,  z: 0 },
+            'front-panel':     { x: 0,    y: 15,   z: 100 },
+            'rear-panel':      { x: 0,    y: 15,   z: -100 },
+            'left-panel':      { x: -120, y: 16,   z: 0 },
+            'right-panel':     { x: 120,  y: 15,   z: 0 },
+            'ssd-mount':       { x: -135,  y: 0,   z: 150 },
+            'ethernet-mount':  { x: -135,    y: 0,   z: -150  },
+            'pi5-mount':       { x: 100,   y: 0,   z: -150 }
+        };
+
+        // --------------------------------------------------------
+        // Init
+        // --------------------------------------------------------
+        async function init() {
+            try {
+                spec = await fetch('../.state/spec.json').then(r => r.json());
+            } catch (e) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error-msg').style.display = 'block';
+                document.getElementById('error-msg').textContent = 'Error loading spec.json: ' + e.message;
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+
+            buildColorLegend();
+            buildDataCards();
+            buildTitleBlock();
+            setupViewport();
+            buildComponentButtons();
+            loadAllSTLs();
+        }
+
+        // --------------------------------------------------------
+        // Color legend (horizontal)
+        // --------------------------------------------------------
+        function buildColorLegend() {
+            const el = document.getElementById('color-legend');
+            for (const [name, info] of Object.entries(spec.colors)) {
+                const item = document.createElement('div');
+                item.className = 'legend-item';
+                item.innerHTML = '<div class="legend-swatch" style="background:' + info.hex + '"></div>' +
+                    '<span>' + name.replace(/-/g, ' ') + '</span>';
+                el.appendChild(item);
+            }
+        }
+
+        // --------------------------------------------------------
+        // Data cards (same as before)
+        // --------------------------------------------------------
+        function buildDataCards() {
+            const grid = document.getElementById('data-grid');
+            const params = spec.parameters;
+
+            const specRows = [
+                ['Base', params.base_x + ' x ' + params.base_y + ' mm'],
+                ['Height', params.height + ' mm'],
+                ['Taper', (params.taper * 100) + '%'],
+                ['Top', params.top_x + ' x ' + params.top_y + ' mm'],
+                ['Wall', params.wall + ' mm'],
+                ['Floor', params.floor + ' mm'],
+                ['Panel Thickness', params.panel_thick + ' mm'],
+                ['Tolerance', params.tolerance + ' mm'],
+                ['Magnet', params.magnet_diameter + ' x ' + params.magnet_height + ' mm'],
+                ['Magnet Recess', params.magnet_recess + ' mm']
+            ];
+            grid.appendChild(makeDataCard('Specifications', specRows));
+
+            // Component stack
+            const compCard = document.createElement('div');
+            compCard.className = 'data-card';
+            compCard.innerHTML = '<div class="data-card-title">Component Stack</div>';
+            spec.components.forEach(function(c) {
+                const row = document.createElement('div');
+                row.className = 'component-row';
+                const colorInfo = spec.colors[c.color] || {};
+                const zPos = c.dimensions.z_position !== undefined ? 'z=' + c.dimensions.z_position + 'mm' :
+                    (c.dimensions.height ? 'h=' + c.dimensions.height + 'mm' : '');
+                row.innerHTML = '<span class="component-name">' + c.name + '</span>' +
+                    '<span class="component-color">' +
+                    '<span class="component-swatch" style="background:' + (colorInfo.hex || '#888') + '"></span>' +
+                    '<span class="component-z">' + zPos + '</span></span>';
+                compCard.appendChild(row);
+            });
+            grid.appendChild(compCard);
+
+            // Hardware BOM
+            const hwCard = document.createElement('div');
+            hwCard.className = 'data-card';
+            hwCard.innerHTML = '<div class="data-card-title">Hardware BOM</div>';
+            spec.hardware.forEach(function(h) {
+                const row = document.createElement('div');
+                row.className = 'hardware-row';
+                row.innerHTML = '<span class="hardware-item">' + h.item + '</span>' +
+                    '<span class="hardware-spec">' + h.spec + '</span>' +
+                    '<span class="hardware-qty">x' + h.quantity + '</span>';
+                hwCard.appendChild(row);
+            });
+            grid.appendChild(hwCard);
+
+            // Print settings
+            const printRows = [];
+            const printTypes = {};
+            spec.components.forEach(function(c) {
+                if (!c.print) return;
+                const key = c.type;
+                if (printTypes[key]) return;
+                printTypes[key] = true;
+                const label = c.type.charAt(0).toUpperCase() + c.type.slice(1);
+                printRows.push([label + ' - Layer', c.print.layer_height + ' mm']);
+                printRows.push([label + ' - Infill', c.print.infill]);
+                printRows.push([label + ' - Material', c.print.material]);
+            });
+            grid.appendChild(makeDataCard('Print Settings', printRows));
+        }
+
+        function makeDataCard(title, rows) {
+            const card = document.createElement('div');
+            card.className = 'data-card';
+            let html = '<div class="data-card-title">' + title + '</div>';
+            rows.forEach(function(r) {
+                html += '<div class="data-row"><span class="data-key">' + r[0] +
+                    '</span><span class="data-value">' + r[1] + '</span></div>';
+            });
+            card.innerHTML = html;
+            return card;
+        }
+
+        // --------------------------------------------------------
+        // Title block
+        // --------------------------------------------------------
+        function buildTitleBlock() {
+            const el = document.getElementById('title-block');
+            const p = spec.project;
+            const today = new Date().toISOString().slice(0, 10);
+            el.innerHTML = '<div class="title-block-left">' +
+                '<span class="title-block-project">' + p.name + ' | ' + p.subtitle + '</span>' +
+                '<span class="title-block-meta"><strong>Version:</strong> ' + p.version + '</span>' +
+                '<span class="title-block-meta"><strong>Units:</strong> ' + p.units + '</span>' +
+                '<span class="title-block-meta"><strong>Scale:</strong> 1:1</span>' +
+                '</div>' +
+                '<span class="title-block-meta">' + today + '</span>';
+        }
+
+        // --------------------------------------------------------
+        // Single Three.js viewport
+        // --------------------------------------------------------
+        function setupViewport() {
+            const el = document.getElementById('vp-main');
+            const w = el.clientWidth || 800;
+            const h = el.clientHeight || 500;
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a0f);
+
+            // Lighting
+            scene.add(new THREE.AmbientLight(0x607080, 1.5));
+
+            const d1 = new THREE.DirectionalLight(0xe0eaf4, 1.0);
+            d1.position.set(150, 300, 200);
+            scene.add(d1);
+
+            const d2 = new THREE.DirectionalLight(0x8090a0, 0.5);
+            d2.position.set(-200, 100, -150);
+            scene.add(d2);
+
+            const d3 = new THREE.DirectionalLight(0x506070, 0.3);
+            d3.position.set(0, -100, -200);
+            scene.add(d3);
+
+            // Ground grid
+            const grid = new THREE.GridHelper(400, 40, 0x1a1a25, 0x1a1a25);
+            scene.add(grid);
+
+            // Camera
+            camera = new THREE.PerspectiveCamera(35, w / h, 0.1, 3000);
+            camera.position.set(280, 240, 280);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(w, h);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            el.appendChild(renderer.domElement);
+
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.target.set(0, 60, 0);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.08;
+            controls.update();
+
+            animate();
+        }
+
+        // --------------------------------------------------------
+        // Component buttons
+        // --------------------------------------------------------
+        function buildComponentButtons() {
+            const container = document.getElementById('comp-buttons');
+
+            // Exploded view button
+            const expBtn = document.createElement('button');
+            expBtn.className = 'comp-btn active';
+            expBtn.textContent = 'Exploded View';
+            expBtn.dataset.view = 'exploded';
+            expBtn.addEventListener('click', function() { switchView('exploded'); });
+            container.appendChild(expBtn);
+
+            // Per-component buttons
+            spec.components.forEach(function(c) {
+                const colorInfo = spec.colors[c.color] || { hex: '#888' };
+                const btn = document.createElement('button');
+                btn.className = 'comp-btn';
+                btn.dataset.view = c.id;
+                btn.innerHTML = '<span class="swatch" style="background:' + colorInfo.hex + '"></span>' +
+                    c.name.split(' - ').pop().replace('Main ', '');
+                btn.addEventListener('click', function() { switchView(c.id); });
+                container.appendChild(btn);
+            });
+        }
+
+        function switchView(viewId) {
+            activeView = viewId;
+
+            // Update button states
+            document.querySelectorAll('.comp-btn').forEach(function(btn) {
+                btn.classList.toggle('active', btn.dataset.view === viewId);
+            });
+
+            // Update label
+            if (viewId === 'exploded') {
+                document.getElementById('vp-label').textContent = 'Exploded View';
+            } else {
+                const comp = spec.components.find(function(c) { return c.id === viewId; });
+                document.getElementById('vp-label').textContent = comp ? comp.name : viewId;
+            }
+
+            // Update mesh visibility and positions
+            components.forEach(function(entry) {
+                if (viewId === 'exploded') {
+                    entry.mesh.visible = true;
+                    const off = EXPLODED[entry.id] || { x: 0, y: 0, z: 0 };
+                    entry.mesh.position.set(off.x, off.y, off.z);
+                } else {
+                    entry.mesh.visible = (entry.id === viewId);
+                    entry.mesh.position.set(0, 0, 0);
+                }
+            });
+
+            // Adjust camera for single component view
+            if (viewId !== 'exploded') {
+                const entry = components.find(function(e) { return e.id === viewId; });
+                if (entry && entry.bbox) {
+                    const size = new THREE.Vector3();
+                    entry.bbox.getSize(size);
+                    const maxDim = Math.max(size.x, size.y, size.z);
+                    const dist = maxDim * 2.5;
+                    camera.position.set(dist * 0.7, dist * 0.6, dist * 0.7);
+                    controls.target.set(0, size.y * 0.4, 0);
+                    controls.update();
+                }
+            } else {
+                camera.position.set(280, 240, 280);
+                controls.target.set(0, 60, 0);
+                controls.update();
+            }
+        }
+
+        // --------------------------------------------------------
+        // Load STL models
+        // --------------------------------------------------------
+        function loadAllSTLs() {
+            const loader = new STLLoader();
+            let loadCount = 0;
+
+            spec.components.forEach(function(comp) {
+                const stlPath = '../' + comp.stl;
+                const colorInfo = spec.colors[comp.color] || { hex: '#888888' };
+
+                loader.load(stlPath, function(geometry) {
+                    geometry.computeVertexNormals();
+
+                    // Center XY on own bounding box, keep Z origin at bottom
+                    geometry.computeBoundingBox();
+                    const bbox = geometry.boundingBox;
+                    const cx = (bbox.min.x + bbox.max.x) / 2;
+                    const cy = (bbox.min.y + bbox.max.y) / 2;
+                    geometry.translate(-cx, -cy, -bbox.min.z);
+
+                    // Rotate from FreeCAD Z-up to Three.js Y-up
+                    geometry.rotateX(-Math.PI / 2);
+
+                    // Recompute bbox after transform, then sit on Y=0
+                    geometry.computeBoundingBox();
+                    geometry.translate(0, -geometry.boundingBox.min.y, 0);
+
+                    const material = new THREE.MeshPhongMaterial({
+                        color: new THREE.Color(colorInfo.hex),
+                        specular: 0x333344,
+                        shininess: 30
+                    });
+
+                    const mesh = new THREE.Mesh(geometry, material);
+
+                    // Edge wireframe overlay
+                    const edges = new THREE.EdgesGeometry(geometry, 25);
+                    const edgeMat = new THREE.LineBasicMaterial({
+                        color: 0x4a5a6a,
+                        transparent: true,
+                        opacity: 0.2
+                    });
+                    mesh.add(new THREE.LineSegments(edges, edgeMat));
+
+                    // Set exploded position
+                    const off = EXPLODED[comp.id] || { x: 0, y: 0, z: 0 };
+                    mesh.position.set(off.x, off.y, off.z);
+
+                    scene.add(mesh);
+                    components.push({
+                        id: comp.id,
+                        mesh: mesh,
+                        bbox: geometry.boundingBox.clone()
+                    });
+
+                    loadCount++;
+                    if (loadCount === spec.components.length) {
+                        onAllLoaded();
+                    }
+                }, undefined, function(err) {
+                    console.warn('Could not load ' + stlPath + ':', err);
+                    loadCount++;
+                    if (loadCount === spec.components.length) {
+                        onAllLoaded();
+                    }
+                });
+            });
+
+            // Fallback if no STLs exist
+            setTimeout(function() {
+                if (components.length === 0) {
+                    const el = document.getElementById('vp-main');
+                    const fb = document.createElement('div');
+                    fb.className = 'fallback-msg';
+                    fb.innerHTML = 'STL files not found<div class="hint">Run <code>./pipeline/build.sh</code> to generate models</div>';
+                    el.appendChild(fb);
+                }
+            }, 5000);
+        }
+
+        function onAllLoaded() {
+            // Start in exploded view (already set)
+            switchView('exploded');
+        }
+
+        // --------------------------------------------------------
+        // Animation loop
+        // --------------------------------------------------------
+        function animate() {
+            requestAnimationFrame(animate);
+            if (controls) controls.update();
+            if (renderer) renderer.render(scene, camera);
+        }
+
+        // --------------------------------------------------------
+        // Resize
+        // --------------------------------------------------------
+        window.addEventListener('resize', function() {
+            const el = document.getElementById('vp-main');
+            const w = el.clientWidth;
+            const h = el.clientHeight;
+            if (w === 0 || h === 0) return;
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+        });
+
+        init();
+    </script>
+    <footer style="margin-top:60px;padding:30px 20px;border-top:1px solid var(--border-color);text-align:center;font-size:11px;color:var(--text-muted);line-height:1.6;max-width:800px;margin-left:auto;margin-right:auto;">
+        <p style="margin-bottom:8px;"><strong style="color:var(--text-secondary);">Trademark Notice</strong></p>
+        <p>This is an independent fan project. It is not produced, endorsed, supported, or affiliated with DC Comics, Warner Bros. Discovery, or any of their subsidiaries or affiliates.</p>
+        <p style="margin-top:6px;">DC, DC Comics, Superman, Krypton, Fortress of Solitude, Phantom Zone, and all related characters, names, and indicia are trademarks of and &copy; DC Comics and/or Warner Bros. Discovery. Raspberry Pi is a trademark of Raspberry Pi Ltd. All other trademarks are the property of their respective owners.</p>
+        <p style="margin-top:12px;">
+            <a href="https://github.com/krisunni/spec-to-stl" target="_blank" rel="noopener" style="color:var(--text-muted);text-decoration:none;margin-right:16px;">GitHub</a>
+            <a href="https://linkedin.com/in/kunnikannan" target="_blank" rel="noopener" style="color:var(--text-muted);text-decoration:none;">LinkedIn</a>
+        </p>
+    </footer>
+</body>
+</html>

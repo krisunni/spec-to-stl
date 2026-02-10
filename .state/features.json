@@ -1,0 +1,94 @@
+{
+  "features": [
+    {
+      "id": "removable-magnetic-panels",
+      "name": "Removable Magnetic Panels",
+      "status": "completed",
+      "version": "1.0.0",
+      "description": "4 side panels attach via 24 neodymium magnets (6 per side) for tool-free access to internal components",
+      "documentation": "/features/removable-magnetic-panels.md"
+    },
+    {
+      "id": "passive-thermal-management",
+      "name": "Passive Thermal Management",
+      "status": "completed",
+      "version": "1.0.0",
+      "description": "Natural chimney cooling through tapered vertical tower design with strategic vent patterns in panels",
+      "documentation": "/features/passive-thermal-management.md"
+    },
+    {
+      "id": "snap-in-component-mounts",
+      "name": "Snap-In Component Mounts",
+      "status": "completed",
+      "version": "1.0.0",
+      "description": "Tool-free clamp mounts for SSD and Ethernet adapter with retention clips, M2.5 screws only for Pi 5",
+      "documentation": "/features/snap-in-component-mounts.md"
+    },
+    {
+      "id": "fortress-themed-aesthetics",
+      "name": "Fortress of Solitude Aesthetics",
+      "status": "completed",
+      "version": "1.0.0",
+      "description": "DC Comics Krypton-themed decorative patterns: crystal bursts, fortress gates, shield arrays, and crystal waves",
+      "documentation": "/features/fortress-themed-aesthetics.md"
+    },
+    {
+      "id": "freecad-parametric-design",
+      "name": "FreeCAD Parametric Design",
+      "status": "completed",
+      "phase": 3,
+      "totalPhases": 3,
+      "version": "1.0.0",
+      "description": "Fully parametric FreeCAD Python script generating all 8 objects with configurable dimensions",
+      "documentation": "/features/freecad-parametric-design.md",
+      "completedPhases": [
+        "Phase 1: Core shell geometry with tapered loft and panel openings",
+        "Phase 2: Internal component mounts (SSD, Ethernet, Pi5) with clamp designs",
+        "Phase 3: Decorative panel patterns and magnet recess integration"
+      ]
+    },
+    {
+      "id": "openscad-original-design",
+      "name": "OpenSCAD Original Design",
+      "status": "completed",
+      "version": "1.0.0",
+      "description": "Original OpenSCAD implementation with two variants: Fortress Spire (vertical tower) and Crystal Shard (angular wedge)",
+      "documentation": "/features/openscad-original-design.md"
+    },
+    {
+      "id": "fortress-accessories-collection",
+      "name": "Fortress Accessories Collection",
+      "status": "in-progress",
+      "phase": 1,
+      "totalPhases": 7,
+      "version": "2.0.0",
+      "description": "7 complementary desk accessories expanding the Krypton Fortress theme: pedestal, LED ring, crystals, cable manager, badge, USB hub, and top cap",
+      "documentation": "/features/fortress-accessories-collection.md",
+      "implementationPlan": "/implementation-plans/fortress-accessories-impl.md",
+      "completedPhases": [
+        "Phase 1: Design specifications and planning for all 7 accessories"
+      ],
+      "currentPhase": "Phase 2: Argo Pedestal - base platform with crystal facet pattern",
+      "pendingPhases": [
+        "Phase 3: Rao's Halo - LED accent ring with RGB control",
+        "Phase 4: Sunstone Shards - decorative crystal pieces with magnetic bases",
+        "Phase 5: Phantom Zone Conduit - segmented cable manager",
+        "Phase 6: House Crest & Kandor Station - status badge and USB hub dock",
+        "Phase 7: Fortress Crown - ventilation top cap with style options"
+      ]
+    },
+    {
+      "id": "spec-driven-pipeline",
+      "name": "Spec-Driven Multi-Color Pipeline",
+      "status": "completed",
+      "version": "2.0.0",
+      "description": "Automated pipeline with spec.json as single source of truth, multi-color 3MF export via FreeCAD, and interactive Three.js spec viewer replacing TechDraw",
+      "documentation": "/pipeline/export_3mf.py",
+      "completedPhases": [
+        "Master spec file (.state/spec.json) with colors, parameters, components, hardware BOM",
+        "Multi-color 3MF export script (pipeline/export_3mf.py) with per-body color assignment",
+        "Three.js web-based spec viewer (dashboard/spec-viewer.html) with exploded view and component selector"
+      ]
+    }
+  ]
+}

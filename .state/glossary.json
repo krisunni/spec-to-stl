@@ -1,0 +1,121 @@
+{
+  "categories": [
+    {
+      "name": "Spec-Driven Development",
+      "terms": [
+        {
+          "term": "Spec-Driven Development",
+          "definition": "Building from machine-readable specifications as the single source of truth. All project data (geometry, colors, hardware BOM, print settings) is defined in JSON and consumed by scripts, pipelines, and dashboards."
+        },
+        {
+          "term": "Single Source of Truth",
+          "definition": "One authoritative data file (.state/spec.json) that drives all downstream outputs. Change a dimension or color here and every generated model, export, and dashboard page reflects it automatically."
+        },
+        {
+          "term": "State-Driven Architecture",
+          "definition": "Project metadata stored in structured JSON files (.state/*.json) consumed by dashboards and pipelines. Components, features, tasks, and changelog are all machine-readable and rendered in the browser."
+        },
+        {
+          "term": "Parametric Design",
+          "definition": "Dimensions defined as variables so the entire model updates from parameter changes. The base, height, taper ratio, wall thickness, and tolerances are all spec parameters, not hardcoded values."
+        },
+        {
+          "term": "Headless Pipeline",
+          "definition": "Automated build process that runs without a GUI. FreeCAD executes Python scripts via CLI to generate geometry, assign colors, and export STL/3MF files without ever opening a window."
+        }
+      ]
+    },
+    {
+      "name": "Pipeline & Tooling",
+      "terms": [
+        {
+          "term": "Build Pipeline",
+          "definition": "Automated sequence: generate model from Python script, assign per-component colors from spec.json, export individual STLs and a single multi-color 3MF. Run with ./pipeline/build.sh."
+        },
+        {
+          "term": "Multi-Color 3MF",
+          "definition": "Single 3MF file containing multiple bodies with per-body color assignment. Enables multi-material or multi-color printing from one file instead of separate STLs per color."
+        },
+        {
+          "term": "STL Export",
+          "definition": "Triangle mesh format for 3D printing. The pipeline exports one STL per component (8 total) for single-color printing or individual part replacement."
+        },
+        {
+          "term": "FreeCAD Python API",
+          "definition": "Scripting interface for parametric CAD modeling. Part.makeLoft(), shape.cut(), and Part::Feature objects are used to create tapered geometry, boolean cuts, and assemblies entirely in code."
+        },
+        {
+          "term": "Headless Rendering",
+          "definition": "Running FreeCAD via CLI (FreeCAD -c) without opening the GUI. The Python script executes in console mode, generates all 8 objects, and the pipeline exports them with zero manual interaction."
+        }
+      ]
+    },
+    {
+      "name": "3D Printing & Manufacturing",
+      "terms": [
+        {
+          "term": "Snap-In Mount",
+          "definition": "Tool-free retention clips that flex to hold components. The SSD and Ethernet mounts use flexible plastic rails that deflect during insertion and spring back to lock the component in place."
+        },
+        {
+          "term": "Magnet Recess",
+          "definition": "Cylindrical pocket (6mm diameter, 1.5mm deep) for press-fitting neodymium magnets. 24 recesses total across the shell and 4 panels enable tool-free magnetic panel attachment."
+        },
+        {
+          "term": "Tolerance",
+          "definition": "Clearance gap (0.3mm) between mating parts for reliable fit. Applied between panels and shell openings so parts slide together without binding or excessive wobble."
+        },
+        {
+          "term": "Lofted Taper",
+          "definition": "Geometry created by blending a base wire to a smaller top wire using Part.makeLoft(). The 140x100mm base transitions to 119x85mm at the top, creating the tapered spire shape."
+        },
+        {
+          "term": "Infill",
+          "definition": "Internal fill pattern density for 3D printing. Structural parts like the shell use 15% infill for strength-to-weight ratio; solid panels use 100% for rigidity and surface quality."
+        }
+      ]
+    },
+    {
+      "name": "Dashboard & Visualization",
+      "terms": [
+        {
+          "term": "Interactive Spec Sheet",
+          "definition": "Three.js browser-based 3D viewer with orbit controls, multiple viewports (front, right, top, isometric), and wireframe overlays. Loads STL meshes and colors directly from spec.json."
+        },
+        {
+          "term": "Exploded View",
+          "definition": "Components separated spatially to show assembly relationships. The spec viewer can spread parts apart along their mount axis so you can see how the shell, mounts, and panels nest together."
+        },
+        {
+          "term": "Data-Driven Dashboard",
+          "definition": "HTML pages that fetch and render directly from JSON state files. No build step and no framework required. Vanilla HTML/JS reads .state/*.json and renders components, features, tasks, and changelog."
+        },
+        {
+          "term": "Component Selector",
+          "definition": "UI control for isolating individual parts in the 3D viewer. Click a component name to show/hide it, making it easy to inspect geometry, check fit, or verify port cutout alignment."
+        }
+      ]
+    },
+    {
+      "name": "Project Structure",
+      "terms": [
+        {
+          "term": "Component",
+          "definition": "A discrete printable part with its own STL, color assignment, and print settings. The project has 8 components: MainShell, 3 internal mounts, and 4 decorative panels."
+        },
+        {
+          "term": "Feature",
+          "definition": "A tracked capability with phase-based progress (planning, design, implementation, testing, completion). Features map to implementation plans and are tracked in .state/features.json."
+        },
+        {
+          "term": "Changelog",
+          "definition": "Version-tagged record of all project changes stored in .state/changelog.json. Each version entry lists changes by type (feature, fix, refactor, docs) with component references."
+        },
+        {
+          "term": "Implementation Plan",
+          "definition": "Detailed spec document written before building a feature. Defines requirements, approach, affected components, and acceptance criteria. This applies the spec-driven methodology to project management."
+        }
+      ]
+    }
+  ]
+}
