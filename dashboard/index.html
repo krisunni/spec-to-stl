@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><polygon points='16,2 28,12 22,30 10,30 4,12' fill='%234A9BD9' stroke='%23C8E6F0' stroke-width='2'/></svg>">
-    <title>Krypton NAS - Spec-Driven 3D Printed Hardware</title>
+    <title>Spec-to-STL - Generative 3D Prints</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -139,7 +139,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* Timeline */
+        /* Project Cards */
         .section-title {
             font-size: 1.4rem;
             font-weight: 600;
@@ -147,6 +147,86 @@
             color: var(--text-primary);
         }
 
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .project-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            text-decoration: none;
+            transition: border-color 0.2s, transform 0.2s;
+            display: block;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-2px);
+        }
+
+        .project-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .project-card-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+        }
+
+        .project-card-version {
+            background: var(--bg-tertiary);
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+        }
+
+        .project-card-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .project-card-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .project-card-stat {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .project-card-stat strong {
+            color: var(--text-secondary);
+        }
+
+        .project-card-colors {
+            display: flex;
+            gap: 4px;
+            margin-top: 12px;
+        }
+
+        .project-color-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        /* Timeline */
         .timeline {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -185,12 +265,6 @@
             font-size: 0.85rem;
             font-weight: 600;
             margin-bottom: 12px;
-        }
-
-        .step-icon {
-            font-size: 1.8rem;
-            display: block;
-            margin-bottom: 8px;
         }
 
         .step-title {
@@ -283,31 +357,6 @@
             font-size: 1rem;
             color: var(--text-secondary);
             margin-bottom: 16px;
-        }
-
-        .color-swatches {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .swatch {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .swatch-circle {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            border: 2px solid var(--border-color);
-            flex-shrink: 0;
-        }
-
-        .swatch-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
         }
 
         .stat-row {
@@ -413,13 +462,14 @@
             .hero-stat-value { font-size: 2rem; }
             .timeline { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
             .arch-pipeline { font-size: 0.8rem; }
+            .project-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1 id="project-name">Krypton NAS</h1>
+            <h1 id="project-name">Spec-to-STL</h1>
             <div class="version-badge" id="version">Loading...</div>
         </header>
 
@@ -439,33 +489,37 @@
         <div id="content" style="display: none;">
             <!-- Hero -->
             <section class="hero">
-                <h2 class="hero-title">Krypton NAS</h2>
-                <p class="hero-tagline">From JSON spec to 3D-printed hardware</p>
+                <h2 class="hero-title">Spec-to-STL</h2>
+                <p class="hero-tagline">Generative 3D prints from JSON specs</p>
                 <p class="hero-pitch">
-                    A 3D-printable Raspberry Pi NAS enclosure built entirely from a machine-readable spec.
-                    One JSON file defines every dimension, color, and constraint. A Python script generates
-                    parametric CAD geometry. A headless pipeline exports print-ready files. A vanilla JS dashboard
+                    A collection of 3D-printable designs built entirely from machine-readable specs.
+                    JSON files define every dimension, color, and constraint. FreeCAD Python scripts generate
+                    parametric geometry. A headless pipeline exports print-ready files. A vanilla JS dashboard
                     visualizes it all. No frameworks, no build step.
                 </p>
                 <div class="hero-stats">
                     <div class="hero-stat">
-                        <span class="hero-stat-value" id="stat-components">8</span>
+                        <span class="hero-stat-value" id="stat-projects">2</span>
+                        <span class="hero-stat-label">Projects</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-value" id="stat-components">9</span>
                         <span class="hero-stat-label">Components</span>
                     </div>
                     <div class="hero-stat">
-                        <span class="hero-stat-value" id="stat-colors">6</span>
+                        <span class="hero-stat-value" id="stat-colors">7</span>
                         <span class="hero-stat-label">Colors</span>
                     </div>
                     <div class="hero-stat">
-                        <span class="hero-stat-value" id="stat-magnets">48</span>
-                        <span class="hero-stat-label">Magnets</span>
-                    </div>
-                    <div class="hero-stat">
-                        <span class="hero-stat-value" id="stat-script">1</span>
-                        <span class="hero-stat-label">Python Script</span>
+                        <span class="hero-stat-value" id="stat-scripts">2</span>
+                        <span class="hero-stat-label">Scripts</span>
                     </div>
                 </div>
             </section>
+
+            <!-- Projects -->
+            <h2 class="section-title">Projects</h2>
+            <div class="project-grid" id="project-grid"></div>
 
             <!-- Process Timeline -->
             <h2 class="section-title">End-to-End Pipeline</h2>
@@ -481,7 +535,7 @@
                     <a href="components.html">
                         <span class="step-number">2</span>
                         <span class="step-title">Generate</span>
-                        <span class="step-desc">FreeCAD Python script creates parametric 3D model</span>
+                        <span class="step-desc">FreeCAD Python scripts create parametric 3D models</span>
                     </a>
                 </div>
                 <div class="timeline-step">
@@ -495,7 +549,7 @@
                     <a href="spec-viewer.html">
                         <span class="step-number">4</span>
                         <span class="step-title">Visualize</span>
-                        <span class="step-desc">Three.js dashboard renders interactive 3D views</span>
+                        <span class="step-desc">Three.js dashboard renders interactive 3D views per project</span>
                     </a>
                 </div>
                 <div class="timeline-step">
@@ -542,14 +596,14 @@
             <h2 class="section-title">Live Project Data</h2>
             <div class="live-grid">
                 <div class="card">
-                    <h3>Color Palette</h3>
-                    <div class="color-swatches" id="color-swatches"></div>
-                </div>
-                <div class="card">
-                    <h3>Project Stats</h3>
+                    <h3>Repository Stats</h3>
                     <div id="project-stats">
                         <div class="stat-row">
-                            <span class="stat-row-label">Components</span>
+                            <span class="stat-row-label">Projects</span>
+                            <span class="stat-row-value" id="stat-proj-count">-</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-row-label">Total Components</span>
                             <span class="stat-row-value" id="stat-comp-count">-</span>
                         </div>
                         <div class="stat-row">
@@ -577,7 +631,7 @@
                 </a>
                 <a href="components.html" class="quick-link">
                     <div class="quick-link-title">Components</div>
-                    <div class="quick-link-desc">8 printable parts with dimensions, materials, and print settings</div>
+                    <div class="quick-link-desc">All printable parts with dimensions, materials, and settings</div>
                 </a>
                 <a href="features.html" class="quick-link">
                     <div class="quick-link-title">Features</div>
@@ -585,7 +639,7 @@
                 </a>
                 <a href="tasks.html" class="quick-link">
                     <div class="quick-link-title">Tasks</div>
-                    <div class="quick-link-desc">Open tasks, bugs, and priorities across the project</div>
+                    <div class="quick-link-desc">Open tasks, bugs, and priorities across all projects</div>
                 </a>
                 <a href="changelog.html" class="quick-link">
                     <div class="quick-link-title">Changelog</div>
@@ -597,7 +651,7 @@
                 </a>
                 <a href="spec-viewer.html" class="quick-link">
                     <div class="quick-link-title">Spec Sheet</div>
-                    <div class="quick-link-desc">Interactive 3D exploded view with engineering data</div>
+                    <div class="quick-link-desc">Interactive 3D viewer with project switcher and engineering data</div>
                 </a>
             </div>
 
@@ -611,8 +665,8 @@
                     you manage a software project.
                 </p>
                 <p>
-                    Every dimension, color, and constraint lives in a JSON spec file. The FreeCAD Python
-                    script reads those parameters to generate 8 interlocking components. The pipeline
+                    Every dimension, color, and constraint lives in a JSON spec file. FreeCAD Python
+                    scripts read those parameters to generate parametric components. The pipeline
                     exports print-ready files. And this dashboard renders it all live from the same
                     state files. No manual sync, no stale documentation.
                 </p>
@@ -627,41 +681,71 @@
     <script>
         async function loadData() {
             try {
-                const [spec, system, features, tasks, components] = await Promise.all([
-                    fetch('../.state/spec.json').then(r => r.json()),
-                    fetch('../.state/system.json').then(r => r.json()),
-                    fetch('../.state/features.json').then(r => r.json()),
-                    fetch('../.state/tasks.json').then(r => r.json()),
-                    fetch('../.state/components.json').then(r => r.json())
+                var responses = await Promise.all([
+                    fetch('../.state/spec.json').then(function(r) { return r.json(); }),
+                    fetch('../.state/system.json').then(function(r) { return r.json(); }),
+                    fetch('../.state/features.json').then(function(r) { return r.json(); }),
+                    fetch('../.state/tasks.json').then(function(r) { return r.json(); }),
+                    fetch('../.state/components.json').then(function(r) { return r.json(); })
                 ]);
+
+                var spec = responses[0];
+                var system = responses[1];
+                var features = responses[2];
+                var tasks = responses[3];
+                var componentsData = responses[4];
 
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('content').style.display = 'block';
 
                 // Header
-                document.getElementById('project-name').textContent = system.name || 'Krypton NAS';
+                document.getElementById('project-name').textContent = system.name || 'Spec-to-STL';
                 document.getElementById('version').textContent = system.version + ' | ' + system.lastUpdated;
 
                 // Hero stats
-                document.getElementById('stat-components').textContent = components.components.length;
-                var colorCount = Object.keys(spec.colors).length;
-                document.getElementById('stat-colors').textContent = colorCount;
+                var projects = spec.projects || [];
+                var totalComponents = 0;
+                var totalColors = 0;
+                projects.forEach(function(proj) {
+                    totalComponents += proj.components.length;
+                    totalColors += Object.keys(proj.colors).length;
+                });
 
-                // Color swatches
-                var swatchContainer = document.getElementById('color-swatches');
-                Object.entries(spec.colors).forEach(function(entry) {
-                    var name = entry[0];
-                    var color = entry[1];
-                    var swatch = document.createElement('div');
-                    swatch.className = 'swatch';
-                    swatch.innerHTML =
-                        '<span class="swatch-circle" style="background:' + color.hex + '"></span>' +
-                        '<span class="swatch-label">' + name.replace(/-/g, ' ') + '</span>';
-                    swatchContainer.appendChild(swatch);
+                document.getElementById('stat-projects').textContent = projects.length;
+                document.getElementById('stat-components').textContent = totalComponents;
+                document.getElementById('stat-colors').textContent = totalColors;
+                document.getElementById('stat-scripts').textContent = projects.length;
+
+                // Project cards
+                var projectGrid = document.getElementById('project-grid');
+                projects.forEach(function(proj) {
+                    var card = document.createElement('a');
+                    card.href = 'spec-viewer.html';
+                    card.className = 'project-card';
+
+                    var colorsHtml = '';
+                    for (var colorName in proj.colors) {
+                        colorsHtml += '<span class="project-color-dot" style="background:' + proj.colors[colorName].hex + '" title="' + colorName.replace(/-/g, ' ') + '"></span>';
+                    }
+
+                    card.innerHTML =
+                        '<div class="project-card-header">' +
+                        '  <span class="project-card-name">' + proj.name + '</span>' +
+                        '  <span class="project-card-version">v' + proj.version + '</span>' +
+                        '</div>' +
+                        '<p class="project-card-desc">' + proj.description + '</p>' +
+                        '<div class="project-card-meta">' +
+                        '  <span class="project-card-stat"><strong>' + proj.components.length + '</strong> components</span>' +
+                        '  <span class="project-card-stat"><strong>' + Object.keys(proj.colors).length + '</strong> colors</span>' +
+                        '  <span class="project-card-stat">Script: <strong>' + proj.script + '</strong></span>' +
+                        '</div>' +
+                        '<div class="project-card-colors">' + colorsHtml + '</div>';
+                    projectGrid.appendChild(card);
                 });
 
                 // Project stats
-                document.getElementById('stat-comp-count').textContent = components.components.length;
+                document.getElementById('stat-proj-count').textContent = projects.length;
+                document.getElementById('stat-comp-count').textContent = componentsData.components.length;
                 document.getElementById('stat-feat-count').textContent = features.features.length;
                 var openTasks = tasks.summary.pending + tasks.summary.inProgress;
                 document.getElementById('stat-task-count').textContent = openTasks;

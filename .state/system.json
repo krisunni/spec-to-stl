@@ -1,20 +1,46 @@
 {
-  "version": "2.0.0",
-  "lastUpdated": "2026-02-09",
-  "name": "Krypton NAS",
-  "description": "3D printable Raspberry Pi 5 NAS enclosure with DC Comics Krypton/Fortress of Solitude theme, passive thermal management, and removable magnetic panels",
+  "version": "3.2.0",
+  "lastUpdated": "2026-02-12",
+  "name": "Spec-to-STL",
+  "description": "Generative 3D prints collection. Spec-driven development: JSON specs define dimensions, colors, and constraints. FreeCAD Python scripts generate parametric geometry. Headless pipeline exports print-ready STLs and multi-color 3MFs.",
   "status": "operational",
+  "projects": [
+    {
+      "id": "krypton-nas",
+      "name": "Krypton NAS",
+      "description": "3D printable Raspberry Pi 5 NAS enclosure with DC Comics Krypton theme",
+      "script": "krypton_nas_panels.py",
+      "components": 8,
+      "version": "2.0.0"
+    },
+    {
+      "id": "headband-spacer",
+      "name": "AirPods Max Headband Spacer",
+      "description": "Graduated wedge spacer to reduce AirPods Max clamping force",
+      "script": "headband_spacer.py",
+      "components": 1,
+      "version": "1.0.0"
+    },
+    {
+      "id": "headphone-stand",
+      "name": "AirPods Max Headphone Stand",
+      "description": "Organic sculptural headphone stand with tripod base, tapered columns, integrated spacer hook, and stretcher vice tool",
+      "script": "headphone_stand.py",
+      "components": 6,
+      "version": "2.0.0"
+    }
+  ],
   "environments": {
     "freecad": {
       "app": "/Applications/FreeCAD.app/Contents/MacOS/FreeCAD",
-      "script": "krypton_nas_panels.py"
+      "scripts": ["krypton_nas_panels.py", "headband_spacer.py", "headphone_stand.py"]
     },
     "openscad": {
       "file": "PiNasCase.scad"
     },
     "print": {
       "slicer": "PrusaSlicer / Cura",
-      "material": "PLA / PETG",
+      "material": "PLA / PETG / TPU",
       "nozzle": "0.4mm"
     }
   },

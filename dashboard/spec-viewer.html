@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><polygon points='16,2 28,12 22,30 10,30 4,12' fill='%234A9BD9' stroke='%23C8E6F0' stroke-width='2'/></svg>">
-    <title>Spec Sheet - Krypton NAS</title>
+    <title>Spec Sheet - Spec-to-STL</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -74,6 +74,46 @@
             background: var(--accent-blue);
             color: white;
             border-color: var(--accent-blue);
+        }
+
+        /* Project tabs */
+        .project-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .project-tab {
+            padding: 10px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .project-tab:hover {
+            border-color: var(--accent-cyan);
+            color: var(--text-primary);
+        }
+
+        .project-tab.active {
+            background: var(--accent-cyan);
+            color: white;
+            border-color: var(--accent-cyan);
+        }
+
+        .project-tab .tab-count {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 6px;
         }
 
         /* Single viewport */
@@ -335,6 +375,8 @@
         <div id="error-msg"></div>
 
         <div id="main-content" style="display: none;">
+            <div class="project-tabs" id="project-tabs"></div>
+
             <div class="viewer-section">
                 <div class="viewport-main" id="vp-main">
                     <span class="viewport-label" id="vp-label">Exploded View</span>
@@ -364,22 +406,35 @@
 
         let spec = null;
         let scene, camera, renderer, controls;
+        let currentProjectIdx = 0;
 
-        // Each loaded component: { id, mesh, color, bbox }
+        // Each loaded component: { id, mesh, edges, color, bbox }
         let components = [];
-        let activeView = 'exploded'; // 'exploded' or a component id
+        let activeView = 'exploded';
 
-        // Exploded view offsets (Three.js Y-up coords)
-        // Panels pull outward from shell center; mounts drop below
-        const EXPLODED = {
-            'main-shell':      { x: 0,    y: 0,  z: 0 },
-            'front-panel':     { x: 0,    y: 15,   z: 100 },
-            'rear-panel':      { x: 0,    y: 15,   z: -100 },
-            'left-panel':      { x: -120, y: 16,   z: 0 },
-            'right-panel':     { x: 120,  y: 15,   z: 0 },
-            'ssd-mount':       { x: -135,  y: 0,   z: 150 },
-            'ethernet-mount':  { x: -135,    y: 0,   z: -150  },
-            'pi5-mount':       { x: 100,   y: 0,   z: -150 }
+        // Exploded view offsets per project (Three.js Y-up coords)
+        const EXPLODED_OFFSETS = {
+            'krypton-nas': {
+                'main-shell':      { x: 0,    y: 0,  z: 0 },
+                'front-panel':     { x: 0,    y: 15,   z: 100 },
+                'rear-panel':      { x: 0,    y: 15,   z: -100 },
+                'left-panel':      { x: -120, y: 16,   z: 0 },
+                'right-panel':     { x: 120,  y: 15,   z: 0 },
+                'ssd-mount':       { x: -135,  y: 0,   z: 150 },
+                'ethernet-mount':  { x: -135,    y: 0,   z: -150  },
+                'pi5-mount':       { x: 100,   y: 0,   z: -150 }
+            },
+            'headband-spacer': {
+                'headband-spacer': { x: 0, y: 0, z: 0 }
+            },
+            'headphone-stand': {
+                'tripod-base':    { x: 0,   y: 0,  z: 0 },
+                'column-lower':   { x: -12,   y: 10, z: 0 },
+                'column-upper':   { x: -12,   y: 100, z: 0 },
+                'stretcher-rail': { x: 0,   y: 0,   z: -100 },
+                'stretcher-arm':  { x: 100, y: 0,   z: -100 },
+                'bolt-retainer':  { x: 180, y: 0,   z: -100 }
+            }
         };
 
         // --------------------------------------------------------
@@ -387,7 +442,7 @@
         // --------------------------------------------------------
         async function init() {
             try {
-                spec = await fetch('../.state/spec.json').then(r => r.json());
+                spec = await fetch('../.state/spec.json').then(function(r) { return r.json(); });
             } catch (e) {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('error-msg').style.display = 'block';
@@ -395,24 +450,85 @@
                 return;
             }
 
+            // Support both multi-project format and legacy single-project format
+            if (!spec.projects) {
+                // Legacy format: wrap in projects array
+                spec = { projects: [
+                    Object.assign({
+                        id: 'krypton-nas',
+                        script: 'krypton_nas_panels.py'
+                    }, spec.project, {
+                        colors: spec.colors,
+                        parameters: spec.parameters,
+                        components: spec.components,
+                        hardware: spec.hardware || [],
+                        assembly: spec.assembly || {}
+                    })
+                ]};
+            }
+
             document.getElementById('loading').style.display = 'none';
             document.getElementById('main-content').style.display = 'block';
 
-            buildColorLegend();
-            buildDataCards();
-            buildTitleBlock();
             setupViewport();
-            buildComponentButtons();
-            loadAllSTLs();
+            buildProjectTabs();
+            loadProject(0);
         }
 
         // --------------------------------------------------------
-        // Color legend (horizontal)
+        // Project tabs
         // --------------------------------------------------------
-        function buildColorLegend() {
-            const el = document.getElementById('color-legend');
-            for (const [name, info] of Object.entries(spec.colors)) {
-                const item = document.createElement('div');
+        function buildProjectTabs() {
+            var container = document.getElementById('project-tabs');
+            container.innerHTML = '';
+            spec.projects.forEach(function(proj, idx) {
+                var tab = document.createElement('button');
+                tab.className = 'project-tab' + (idx === currentProjectIdx ? ' active' : '');
+                tab.innerHTML = proj.name + '<span class="tab-count">' + proj.components.length + '</span>';
+                tab.addEventListener('click', function() {
+                    if (idx !== currentProjectIdx) {
+                        currentProjectIdx = idx;
+                        loadProject(idx);
+                        // Update tab active states
+                        document.querySelectorAll('.project-tab').forEach(function(t, i) {
+                            t.classList.toggle('active', i === idx);
+                        });
+                    }
+                });
+                container.appendChild(tab);
+            });
+        }
+
+        // --------------------------------------------------------
+        // Load a project: clear scene, load STLs, build UI
+        // --------------------------------------------------------
+        function loadProject(projIdx) {
+            var proj = spec.projects[projIdx];
+
+            // Clear existing meshes from scene
+            components.forEach(function(entry) {
+                scene.remove(entry.mesh);
+            });
+            components = [];
+            activeView = 'exploded';
+
+            // Rebuild UI for this project
+            buildColorLegend(proj);
+            buildDataCards(proj);
+            buildTitleBlock(proj);
+            buildComponentButtons(proj);
+            loadAllSTLs(proj);
+        }
+
+        // --------------------------------------------------------
+        // Color legend
+        // --------------------------------------------------------
+        function buildColorLegend(proj) {
+            var el = document.getElementById('color-legend');
+            el.innerHTML = '';
+            for (var name in proj.colors) {
+                var info = proj.colors[name];
+                var item = document.createElement('div');
                 item.className = 'legend-item';
                 item.innerHTML = '<div class="legend-swatch" style="background:' + info.hex + '"></div>' +
                     '<span>' + name.replace(/-/g, ' ') + '</span>';
@@ -421,36 +537,49 @@
         }
 
         // --------------------------------------------------------
-        // Data cards (same as before)
+        // Data cards
         // --------------------------------------------------------
-        function buildDataCards() {
-            const grid = document.getElementById('data-grid');
-            const params = spec.parameters;
+        function buildDataCards(proj) {
+            var grid = document.getElementById('data-grid');
+            grid.innerHTML = '';
+            var params = proj.parameters;
 
-            const specRows = [
-                ['Base', params.base_x + ' x ' + params.base_y + ' mm'],
-                ['Height', params.height + ' mm'],
-                ['Taper', (params.taper * 100) + '%'],
-                ['Top', params.top_x + ' x ' + params.top_y + ' mm'],
-                ['Wall', params.wall + ' mm'],
-                ['Floor', params.floor + ' mm'],
-                ['Panel Thickness', params.panel_thick + ' mm'],
-                ['Tolerance', params.tolerance + ' mm'],
-                ['Magnet', params.magnet_diameter + ' x ' + params.magnet_height + ' mm'],
-                ['Magnet Recess', params.magnet_recess + ' mm']
-            ];
+            // Specifications card - dynamically build from parameters
+            var specRows = [];
+            for (var key in params) {
+                var label = key.replace(/_/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+                var val = params[key];
+                if (typeof val === 'number') {
+                    // Detect percentage-like values
+                    if (key === 'taper') {
+                        specRows.push([label, (val * 100) + '%']);
+                    } else {
+                        specRows.push([label, val + ' mm']);
+                    }
+                } else {
+                    specRows.push([label, String(val)]);
+                }
+            }
             grid.appendChild(makeDataCard('Specifications', specRows));
 
             // Component stack
-            const compCard = document.createElement('div');
+            var compCard = document.createElement('div');
             compCard.className = 'data-card';
-            compCard.innerHTML = '<div class="data-card-title">Component Stack</div>';
-            spec.components.forEach(function(c) {
-                const row = document.createElement('div');
+            compCard.innerHTML = '<div class="data-card-title">Components</div>';
+            proj.components.forEach(function(c) {
+                var row = document.createElement('div');
                 row.className = 'component-row';
-                const colorInfo = spec.colors[c.color] || {};
-                const zPos = c.dimensions.z_position !== undefined ? 'z=' + c.dimensions.z_position + 'mm' :
-                    (c.dimensions.height ? 'h=' + c.dimensions.height + 'mm' : '');
+                var colorInfo = proj.colors[c.color] || {};
+                var zPos = '';
+                if (c.dimensions) {
+                    if (c.dimensions.z_position !== undefined) {
+                        zPos = 'z=' + c.dimensions.z_position + 'mm';
+                    } else if (c.dimensions.height !== undefined) {
+                        zPos = 'h=' + c.dimensions.height + 'mm';
+                    } else if (c.dimensions.length !== undefined) {
+                        zPos = c.dimensions.length + 'mm long';
+                    }
+                }
                 row.innerHTML = '<span class="component-name">' + c.name + '</span>' +
                     '<span class="component-color">' +
                     '<span class="component-swatch" style="background:' + (colorInfo.hex || '#888') + '"></span>' +
@@ -459,40 +588,51 @@
             });
             grid.appendChild(compCard);
 
-            // Hardware BOM
-            const hwCard = document.createElement('div');
-            hwCard.className = 'data-card';
-            hwCard.innerHTML = '<div class="data-card-title">Hardware BOM</div>';
-            spec.hardware.forEach(function(h) {
-                const row = document.createElement('div');
-                row.className = 'hardware-row';
-                row.innerHTML = '<span class="hardware-item">' + h.item + '</span>' +
-                    '<span class="hardware-spec">' + h.spec + '</span>' +
-                    '<span class="hardware-qty">x' + h.quantity + '</span>';
-                hwCard.appendChild(row);
-            });
-            grid.appendChild(hwCard);
+            // Hardware BOM (if project has hardware)
+            if (proj.hardware && proj.hardware.length > 0) {
+                var hwCard = document.createElement('div');
+                hwCard.className = 'data-card';
+                hwCard.innerHTML = '<div class="data-card-title">Hardware BOM</div>';
+                proj.hardware.forEach(function(h) {
+                    var row = document.createElement('div');
+                    row.className = 'hardware-row';
+                    row.innerHTML = '<span class="hardware-item">' + h.item + '</span>' +
+                        '<span class="hardware-spec">' + h.spec + '</span>' +
+                        '<span class="hardware-qty">x' + h.quantity + '</span>';
+                    hwCard.appendChild(row);
+                });
+                grid.appendChild(hwCard);
+            }
 
             // Print settings
-            const printRows = [];
-            const printTypes = {};
-            spec.components.forEach(function(c) {
+            var printRows = [];
+            var printTypes = {};
+            proj.components.forEach(function(c) {
                 if (!c.print) return;
-                const key = c.type;
+                var key = c.type;
                 if (printTypes[key]) return;
                 printTypes[key] = true;
-                const label = c.type.charAt(0).toUpperCase() + c.type.slice(1);
+                var label = c.type.charAt(0).toUpperCase() + c.type.slice(1);
                 printRows.push([label + ' - Layer', c.print.layer_height + ' mm']);
                 printRows.push([label + ' - Infill', c.print.infill]);
                 printRows.push([label + ' - Material', c.print.material]);
             });
             grid.appendChild(makeDataCard('Print Settings', printRows));
+
+            // Assembly (if project has assembly instructions)
+            if (proj.assembly && proj.assembly.notes && proj.assembly.notes.length > 0) {
+                var asmRows = [];
+                proj.assembly.notes.forEach(function(note, i) {
+                    asmRows.push(['Note ' + (i + 1), note]);
+                });
+                grid.appendChild(makeDataCard('Assembly Notes', asmRows));
+            }
         }
 
         function makeDataCard(title, rows) {
-            const card = document.createElement('div');
+            var card = document.createElement('div');
             card.className = 'data-card';
-            let html = '<div class="data-card-title">' + title + '</div>';
+            var html = '<div class="data-card-title">' + title + '</div>';
             rows.forEach(function(r) {
                 html += '<div class="data-row"><span class="data-key">' + r[0] +
                     '</span><span class="data-value">' + r[1] + '</span></div>';
@@ -504,26 +644,25 @@
         // --------------------------------------------------------
         // Title block
         // --------------------------------------------------------
-        function buildTitleBlock() {
-            const el = document.getElementById('title-block');
-            const p = spec.project;
-            const today = new Date().toISOString().slice(0, 10);
+        function buildTitleBlock(proj) {
+            var el = document.getElementById('title-block');
+            var today = new Date().toISOString().slice(0, 10);
             el.innerHTML = '<div class="title-block-left">' +
-                '<span class="title-block-project">' + p.name + ' | ' + p.subtitle + '</span>' +
-                '<span class="title-block-meta"><strong>Version:</strong> ' + p.version + '</span>' +
-                '<span class="title-block-meta"><strong>Units:</strong> ' + p.units + '</span>' +
+                '<span class="title-block-project">' + proj.name + (proj.subtitle ? ' | ' + proj.subtitle : '') + '</span>' +
+                '<span class="title-block-meta"><strong>Version:</strong> ' + proj.version + '</span>' +
+                '<span class="title-block-meta"><strong>Units:</strong> ' + proj.units + '</span>' +
                 '<span class="title-block-meta"><strong>Scale:</strong> 1:1</span>' +
                 '</div>' +
                 '<span class="title-block-meta">' + today + '</span>';
         }
 
         // --------------------------------------------------------
-        // Single Three.js viewport
+        // Three.js viewport
         // --------------------------------------------------------
         function setupViewport() {
-            const el = document.getElementById('vp-main');
-            const w = el.clientWidth || 800;
-            const h = el.clientHeight || 500;
+            var el = document.getElementById('vp-main');
+            var w = el.clientWidth || 800;
+            var h = el.clientHeight || 500;
 
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0x0a0a0f);
@@ -531,20 +670,20 @@
             // Lighting
             scene.add(new THREE.AmbientLight(0x607080, 1.5));
 
-            const d1 = new THREE.DirectionalLight(0xe0eaf4, 1.0);
+            var d1 = new THREE.DirectionalLight(0xe0eaf4, 1.0);
             d1.position.set(150, 300, 200);
             scene.add(d1);
 
-            const d2 = new THREE.DirectionalLight(0x8090a0, 0.5);
+            var d2 = new THREE.DirectionalLight(0x8090a0, 0.5);
             d2.position.set(-200, 100, -150);
             scene.add(d2);
 
-            const d3 = new THREE.DirectionalLight(0x506070, 0.3);
+            var d3 = new THREE.DirectionalLight(0x506070, 0.3);
             d3.position.set(0, -100, -200);
             scene.add(d3);
 
             // Ground grid
-            const grid = new THREE.GridHelper(400, 40, 0x1a1a25, 0x1a1a25);
+            var grid = new THREE.GridHelper(400, 40, 0x1a1a25, 0x1a1a25);
             scene.add(grid);
 
             // Camera
@@ -568,31 +707,34 @@
         // --------------------------------------------------------
         // Component buttons
         // --------------------------------------------------------
-        function buildComponentButtons() {
-            const container = document.getElementById('comp-buttons');
+        function buildComponentButtons(proj) {
+            var container = document.getElementById('comp-buttons');
+            container.innerHTML = '';
 
-            // Exploded view button
-            const expBtn = document.createElement('button');
-            expBtn.className = 'comp-btn active';
-            expBtn.textContent = 'Exploded View';
-            expBtn.dataset.view = 'exploded';
-            expBtn.addEventListener('click', function() { switchView('exploded'); });
-            container.appendChild(expBtn);
+            // Exploded view button (only useful for multi-component projects)
+            if (proj.components.length > 1) {
+                var expBtn = document.createElement('button');
+                expBtn.className = 'comp-btn active';
+                expBtn.textContent = 'Exploded View';
+                expBtn.dataset.view = 'exploded';
+                expBtn.addEventListener('click', function() { switchView('exploded', proj); });
+                container.appendChild(expBtn);
+            }
 
             // Per-component buttons
-            spec.components.forEach(function(c) {
-                const colorInfo = spec.colors[c.color] || { hex: '#888' };
-                const btn = document.createElement('button');
-                btn.className = 'comp-btn';
+            proj.components.forEach(function(c) {
+                var colorInfo = proj.colors[c.color] || { hex: '#888' };
+                var btn = document.createElement('button');
+                btn.className = 'comp-btn' + (proj.components.length === 1 ? ' active' : '');
                 btn.dataset.view = c.id;
                 btn.innerHTML = '<span class="swatch" style="background:' + colorInfo.hex + '"></span>' +
                     c.name.split(' - ').pop().replace('Main ', '');
-                btn.addEventListener('click', function() { switchView(c.id); });
+                btn.addEventListener('click', function() { switchView(c.id, proj); });
                 container.appendChild(btn);
             });
         }
 
-        function switchView(viewId) {
+        function switchView(viewId, proj) {
             activeView = viewId;
 
             // Update button states
@@ -600,11 +742,14 @@
                 btn.classList.toggle('active', btn.dataset.view === viewId);
             });
 
+            var projId = proj.id;
+            var offsets = EXPLODED_OFFSETS[projId] || {};
+
             // Update label
             if (viewId === 'exploded') {
-                document.getElementById('vp-label').textContent = 'Exploded View';
+                document.getElementById('vp-label').textContent = proj.name + ' - Exploded View';
             } else {
-                const comp = spec.components.find(function(c) { return c.id === viewId; });
+                var comp = proj.components.find(function(c) { return c.id === viewId; });
                 document.getElementById('vp-label').textContent = comp ? comp.name : viewId;
             }
 
@@ -612,7 +757,7 @@
             components.forEach(function(entry) {
                 if (viewId === 'exploded') {
                     entry.mesh.visible = true;
-                    const off = EXPLODED[entry.id] || { x: 0, y: 0, z: 0 };
+                    var off = offsets[entry.id] || { x: 0, y: 0, z: 0 };
                     entry.mesh.position.set(off.x, off.y, off.z);
                 } else {
                     entry.mesh.visible = (entry.id === viewId);
@@ -620,44 +765,56 @@
                 }
             });
 
-            // Adjust camera for single component view
+            // Adjust camera
             if (viewId !== 'exploded') {
-                const entry = components.find(function(e) { return e.id === viewId; });
+                var entry = components.find(function(e) { return e.id === viewId; });
                 if (entry && entry.bbox) {
-                    const size = new THREE.Vector3();
+                    var size = new THREE.Vector3();
                     entry.bbox.getSize(size);
-                    const maxDim = Math.max(size.x, size.y, size.z);
-                    const dist = maxDim * 2.5;
+                    var maxDim = Math.max(size.x, size.y, size.z);
+                    var dist = maxDim * 2.5;
                     camera.position.set(dist * 0.7, dist * 0.6, dist * 0.7);
                     controls.target.set(0, size.y * 0.4, 0);
                     controls.update();
                 }
             } else {
-                camera.position.set(280, 240, 280);
-                controls.target.set(0, 60, 0);
+                // For multi-component, use wider view
+                if (proj.components.length > 1) {
+                    camera.position.set(280, 240, 280);
+                    controls.target.set(0, 60, 0);
+                } else {
+                    camera.position.set(80, 60, 80);
+                    controls.target.set(0, 4, 0);
+                }
                 controls.update();
             }
         }
 
         // --------------------------------------------------------
-        // Load STL models
+        // Load STL models for current project
         // --------------------------------------------------------
-        function loadAllSTLs() {
-            const loader = new STLLoader();
-            let loadCount = 0;
+        function loadAllSTLs(proj) {
+            var loader = new STLLoader();
+            var loadCount = 0;
+            var totalCount = proj.components.length;
+            var offsets = EXPLODED_OFFSETS[proj.id] || {};
 
-            spec.components.forEach(function(comp) {
-                const stlPath = '../' + comp.stl;
-                const colorInfo = spec.colors[comp.color] || { hex: '#888888' };
+            // Remove fallback message if present
+            var existing = document.querySelector('.fallback-msg');
+            if (existing) existing.remove();
+
+            proj.components.forEach(function(comp) {
+                var stlPath = '../' + comp.stl;
+                var colorInfo = proj.colors[comp.color] || { hex: '#888888' };
 
                 loader.load(stlPath, function(geometry) {
                     geometry.computeVertexNormals();
 
                     // Center XY on own bounding box, keep Z origin at bottom
                     geometry.computeBoundingBox();
-                    const bbox = geometry.boundingBox;
-                    const cx = (bbox.min.x + bbox.max.x) / 2;
-                    const cy = (bbox.min.y + bbox.max.y) / 2;
+                    var bbox = geometry.boundingBox;
+                    var cx = (bbox.min.x + bbox.max.x) / 2;
+                    var cy = (bbox.min.y + bbox.max.y) / 2;
                     geometry.translate(-cx, -cy, -bbox.min.z);
 
                     // Rotate from FreeCAD Z-up to Three.js Y-up
@@ -667,17 +824,17 @@
                     geometry.computeBoundingBox();
                     geometry.translate(0, -geometry.boundingBox.min.y, 0);
 
-                    const material = new THREE.MeshPhongMaterial({
+                    var material = new THREE.MeshPhongMaterial({
                         color: new THREE.Color(colorInfo.hex),
                         specular: 0x333344,
                         shininess: 30
                     });
 
-                    const mesh = new THREE.Mesh(geometry, material);
+                    var mesh = new THREE.Mesh(geometry, material);
 
                     // Edge wireframe overlay
-                    const edges = new THREE.EdgesGeometry(geometry, 25);
-                    const edgeMat = new THREE.LineBasicMaterial({
+                    var edges = new THREE.EdgesGeometry(geometry, 25);
+                    var edgeMat = new THREE.LineBasicMaterial({
                         color: 0x4a5a6a,
                         transparent: true,
                         opacity: 0.2
@@ -685,7 +842,7 @@
                     mesh.add(new THREE.LineSegments(edges, edgeMat));
 
                     // Set exploded position
-                    const off = EXPLODED[comp.id] || { x: 0, y: 0, z: 0 };
+                    var off = offsets[comp.id] || { x: 0, y: 0, z: 0 };
                     mesh.position.set(off.x, off.y, off.z);
 
                     scene.add(mesh);
@@ -696,14 +853,14 @@
                     });
 
                     loadCount++;
-                    if (loadCount === spec.components.length) {
-                        onAllLoaded();
+                    if (loadCount === totalCount) {
+                        onAllLoaded(proj);
                     }
                 }, undefined, function(err) {
                     console.warn('Could not load ' + stlPath + ':', err);
                     loadCount++;
-                    if (loadCount === spec.components.length) {
-                        onAllLoaded();
+                    if (loadCount === totalCount) {
+                        onAllLoaded(proj);
                     }
                 });
             });
@@ -711,8 +868,8 @@
             // Fallback if no STLs exist
             setTimeout(function() {
                 if (components.length === 0) {
-                    const el = document.getElementById('vp-main');
-                    const fb = document.createElement('div');
+                    var el = document.getElementById('vp-main');
+                    var fb = document.createElement('div');
                     fb.className = 'fallback-msg';
                     fb.innerHTML = 'STL files not found<div class="hint">Run <code>./pipeline/build.sh</code> to generate models</div>';
                     el.appendChild(fb);
@@ -720,9 +877,24 @@
             }, 5000);
         }
 
-        function onAllLoaded() {
-            // Start in exploded view (already set)
-            switchView('exploded');
+        function onAllLoaded(proj) {
+            if (proj.components.length > 1) {
+                switchView('exploded', proj);
+            } else {
+                // Single component - show it directly
+                switchView(proj.components[0].id, proj);
+                // Adjust camera for smaller objects
+                var entry = components[0];
+                if (entry && entry.bbox) {
+                    var size = new THREE.Vector3();
+                    entry.bbox.getSize(size);
+                    var maxDim = Math.max(size.x, size.y, size.z);
+                    var dist = maxDim * 2.5;
+                    camera.position.set(dist * 0.7, dist * 0.6, dist * 0.7);
+                    controls.target.set(0, size.y * 0.4, 0);
+                    controls.update();
+                }
+            }
         }
 
         // --------------------------------------------------------
@@ -738,9 +910,9 @@
         // Resize
         // --------------------------------------------------------
         window.addEventListener('resize', function() {
-            const el = document.getElementById('vp-main');
-            const w = el.clientWidth;
-            const h = el.clientHeight;
+            var el = document.getElementById('vp-main');
+            var w = el.clientWidth;
+            var h = el.clientHeight;
             if (w === 0 || h === 0) return;
             camera.aspect = w / h;
             camera.updateProjectionMatrix();

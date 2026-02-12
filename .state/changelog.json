@@ -1,6 +1,152 @@
 {
   "versions": [
     {
+      "version": "3.2.0",
+      "date": "2026-02-12",
+      "status": "released",
+      "highlight": "Headphone Stand: Complete Organic Redesign - Tripod Base + Sculptural Forms",
+      "changes": [
+        {
+          "type": "feature",
+          "component": "tripod-base",
+          "description": "Organic tripod base - new component",
+          "details": "3 curved legs radiating at 120° intervals from central hub (48mm dia). Legs taper from 22mm at hub to 16mm at tips, curve down 12mm for stability. 140mm footprint. Column socket (28mm) in hub center. Inspired by fine furniture - flowing curves replace boxy rectangular base.",
+          "reference": "headphone_stand.py (TripodBase)"
+        },
+        {
+          "type": "feature",
+          "component": "column-lower",
+          "description": "Tapered outer column - new component",
+          "details": "Organic tapered sleeve (27.5-24mm, 85mm tall) replaces square tube. Press-fits into tripod base socket. Hollow interior (21.5mm) accepts upper column. 4 M3 setscrew holes for height locking (15mm spacing). 3mm wall thickness.",
+          "reference": "headphone_stand.py (ColumnLower)"
+        },
+        {
+          "type": "feature",
+          "component": "column-upper",
+          "description": "Tapered inner column with integrated cradle - new component",
+          "details": "Organic tapered column (20.9-18mm, 115mm tall) with integrated teardrop cradle at top (75mm wide). Arched top (R85 convex) with R13 concave channel. Integrated spacer hook slot at back (42mm tall) replaces shelf - cleaner design. Slides in lower column with 0.3mm tolerance.",
+          "reference": "headphone_stand.py (ColumnUpper)"
+        },
+        {
+          "type": "feature",
+          "component": "stretcher-rail",
+          "description": "Organic stretcher rail redesign",
+          "details": "Larger body (145x26x28mm), wider channel (15mm). Fixed pad now 58mm tall with organic rounded edges and gentler R50 concave curve (vs R40). Smoother pad distributes pressure more evenly.",
+          "reference": "headphone_stand.py (StretcherRail)"
+        },
+        {
+          "type": "feature",
+          "component": "stretcher-arm",
+          "description": "Organic stretcher arm redesign",
+          "details": "Larger base (22x14.4x17.5mm) and taller pad (58mm vs 50mm). Organic rounded edges with R50 concave curve. Better ergonomics and ear cup contact.",
+          "reference": "headphone_stand.py (StretcherArm)"
+        },
+        {
+          "type": "feature",
+          "component": "bolt-retainer",
+          "description": "Bolt retainer knob - new component",
+          "details": "Threaded knob (22mm dia x 8mm) with 16 grip facets screws onto M6 bolt end past captive nut to prevent bolt backout. User taps M6 thread after printing. Addresses user request for bolt stop mechanism. 100% infill for thread strength.",
+          "reference": "headphone_stand.py (BoltRetainer)"
+        },
+        {
+          "type": "removed",
+          "component": "stand-base",
+          "description": "Removed rectangular base + square tube",
+          "details": "Replaced by organic TripodBase - more stable, elegant, furniture-like aesthetic."
+        },
+        {
+          "type": "removed",
+          "component": "stand-slider",
+          "description": "Removed square slider column",
+          "details": "Replaced by ColumnLower + ColumnUpper two-piece design - tapered organic shapes, setscrew height lock (vs slot/tab), integrated spacer hook (vs shelf)."
+        }
+      ]
+    },
+    {
+      "version": "3.1.0",
+      "date": "2026-02-12",
+      "status": "released",
+      "highlight": "Headphone Stand: Curved Cradle + Stretcher Vice Tool",
+      "changes": [
+        {
+          "type": "fix",
+          "component": "stand-slider",
+          "description": "Curved cradle top surface",
+          "details": "Replaced flat-top cradle with convex arched surface (R80mm). Large cylinder subtraction from below creates natural arch for headband to rest in. Concave channel cut into arched surface as before.",
+          "reference": "headphone_stand.py"
+        },
+        {
+          "type": "feature",
+          "component": "stretcher-rail",
+          "description": "Stretcher Vice Rail - new component",
+          "details": "Screw-driven vice body (140x22x22mm) with U-channel, fixed ear cup pad post (50mm tall, concave R40 face), M6 bolt counterbore + clearance hole, and graduation marks at 5mm intervals.",
+          "reference": "headphone_stand.py"
+        },
+        {
+          "type": "feature",
+          "component": "stretcher-arm",
+          "description": "Stretcher Vice Arm - new component",
+          "details": "Sliding jaw (20x13.4x13.5mm base) with 50mm pad post (concave R40 face), captive M6 nut pocket (10.2mm square), and bolt clearance hole. M6 bolt gives 1mm spread per turn for gradual headphone stretching.",
+          "reference": "headphone_stand.py"
+        }
+      ]
+    },
+    {
+      "version": "3.0.0",
+      "date": "2026-02-12",
+      "status": "released",
+      "highlight": "Multi-Project Repository, Headband Spacer & Headphone Stand",
+      "changes": [
+        {
+          "type": "feature",
+          "component": "headphone-stand",
+          "description": "AirPods Max Headphone Stand - new project",
+          "details": "Two-piece telescoping headphone stand with adjustable height. Square tube base (130x90mm) with 5 locking slots, slider column with curved headband cradle, locking tab, and spacer holder shelf. Height range 61-161mm in 15mm steps.",
+          "reference": "headphone_stand.py"
+        },
+        {
+          "type": "feature",
+          "component": "headband-spacer",
+          "description": "AirPods Max Headband Spacer - new project",
+          "details": "Graduated wedge spacer (37-47mm taper over 80mm) that slides between mesh canopy and steel frame to reduce clamping force. Frame rail grooves, 4 graduation notches at 16mm intervals, chamfered leading edge. FreeCAD Python script with full parametric design.",
+          "reference": "headband_spacer.py"
+        },
+        {
+          "type": "feature",
+          "component": "project",
+          "description": "Multi-project repository structure",
+          "details": "Restructured repo from single-project (Krypton NAS) to multi-project generative 3D prints collection. spec.json now contains a projects array. Each project has its own colors, parameters, components, and assembly data.",
+          "reference": ".state/spec.json"
+        },
+        {
+          "type": "feature",
+          "component": "tooling",
+          "description": "Multi-project build pipeline",
+          "details": "export_3mf.py and build.sh now iterate over all projects in spec.json, generating models and exporting STLs to project-specific subdirectories (stl/krypton-nas/, stl/headband-spacer/).",
+          "reference": "pipeline/export_3mf.py"
+        },
+        {
+          "type": "feature",
+          "component": "tooling",
+          "description": "Multi-project spec viewer with project tabs",
+          "details": "spec-viewer.html now shows a project switcher. Each project gets its own 3D viewport, component buttons, color legend, data cards, and print settings. STLs loaded from project subdirectories.",
+          "reference": "dashboard/spec-viewer.html"
+        },
+        {
+          "type": "chore",
+          "component": "project",
+          "description": "STL directory reorganization",
+          "details": "Moved STLs from flat stl/ directory into project subdirectories: stl/krypton-nas/ and stl/headband-spacer/. Updated all references in spec.json, components.json, and pipeline."
+        },
+        {
+          "type": "feature",
+          "component": "project",
+          "description": "Updated landing page and README for multi-project repo",
+          "details": "Dashboard index.html now shows project cards with links to each project's spec viewer. README updated to describe the generative 3D prints collection."
+        }
+      ]
+    },
+    {
       "version": "2.0.0",
       "date": "2026-02-09",
       "status": "released",

@@ -3,6 +3,7 @@
     {
       "id": "main-shell",
       "name": "Main Shell",
+      "project": "krypton-nas",
       "version": "1.0.0",
       "status": "operational",
       "type": "enclosure",
@@ -20,7 +21,7 @@
         "wall": "2.8 mm",
         "floor": "3.0 mm"
       },
-      "stl": "stl/MainShell.stl",
+      "stl": "stl/krypton-nas/MainShell.stl",
       "color": "krypton-ice",
       "print": {
         "orientation": "opening-up",
@@ -33,6 +34,7 @@
     {
       "id": "front-panel",
       "name": "Front Panel - Crystal Burst",
+      "project": "krypton-nas",
       "version": "1.0.0",
       "status": "operational",
       "type": "panel",
@@ -44,7 +46,7 @@
         "6 embedded magnet slots",
         "2.5mm thick with 5mm lip"
       ],
-      "stl": "stl/FrontPanel_CrystalBurst.stl",
+      "stl": "stl/krypton-nas/FrontPanel_CrystalBurst.stl",
       "color": "crystal-blue",
       "print": {
         "orientation": "pattern-up",
@@ -57,6 +59,7 @@
     {
       "id": "rear-panel",
       "name": "Rear Panel - Fortress Gate",
+      "project": "krypton-nas",
       "version": "1.0.0",
       "status": "operational",
       "type": "panel",
@@ -68,7 +71,7 @@
         "Bottom diamond accents",
         "RJ45 Ethernet passthrough cutout"
       ],
-      "stl": "stl/RearPanel_FortressGate.stl",
+      "stl": "stl/krypton-nas/RearPanel_FortressGate.stl",
       "color": "crystal-blue",
       "print": {
         "orientation": "pattern-up",
@@ -81,6 +84,7 @@
     {
       "id": "left-panel",
       "name": "Left Panel - Shield Array",
+      "project": "krypton-nas",
       "version": "1.0.0",
       "status": "operational",
       "type": "panel",
@@ -92,7 +96,7 @@
         "Dual micro-HDMI cutouts",
         "Ethernet jack cutout"
       ],
-      "stl": "stl/LeftPanel_ShieldArray.stl",
+      "stl": "stl/krypton-nas/LeftPanel_ShieldArray.stl",
       "color": "sunstone-gold",
       "print": {
         "orientation": "pattern-up",
@@ -105,6 +109,7 @@
     {
       "id": "right-panel",
       "name": "Right Panel - Crystal Wave",
+      "project": "krypton-nas",
       "version": "1.0.0",
       "status": "operational",
       "type": "panel",
@@ -116,7 +121,7 @@
         "Ethernet adapter cutout",
         "SSD cable exit slot"
       ],
-      "stl": "stl/RightPanel_CrystalWave.stl",
+      "stl": "stl/krypton-nas/RightPanel_CrystalWave.stl",
       "color": "rao-red",
       "print": {
         "orientation": "pattern-up",
@@ -129,6 +134,7 @@
     {
       "id": "ssd-mount",
       "name": "SSD Clamp Mount",
+      "project": "krypton-nas",
       "version": "1.0.0",
       "status": "operational",
       "type": "mount",
@@ -140,7 +146,7 @@
         "4 snap-in clips for secure hold",
         "Ventilation clearance underneath"
       ],
-      "stl": "stl/SSD_ClampMount.stl",
+      "stl": "stl/krypton-nas/SSD_ClampMount.stl",
       "color": "fortress-silver",
       "print": {
         "orientation": "flat",
@@ -153,6 +159,7 @@
     {
       "id": "ethernet-mount",
       "name": "Ethernet Clamp Mount",
+      "project": "krypton-nas",
       "version": "1.0.0",
       "status": "operational",
       "type": "mount",
@@ -164,7 +171,7 @@
         "Tool-free snap-in design",
         "Cable routing clearance"
       ],
-      "stl": "stl/Ethernet_ClampMount.stl",
+      "stl": "stl/krypton-nas/Ethernet_ClampMount.stl",
       "color": "fortress-silver",
       "print": {
         "orientation": "flat",
@@ -177,6 +184,7 @@
     {
       "id": "pi5-mount",
       "name": "Raspberry Pi 5 Mount",
+      "project": "krypton-nas",
       "version": "1.0.0",
       "status": "operational",
       "type": "mount",
@@ -188,7 +196,7 @@
         "Airflow platform with ventilation slots",
         "Board sits at z=73mm with 8mm standoff"
       ],
-      "stl": "stl/Pi5_Mount.stl",
+      "stl": "stl/krypton-nas/Pi5_Mount.stl",
       "color": "fortress-silver",
       "print": {
         "orientation": "flat",
@@ -196,6 +204,216 @@
         "layer_height": "0.2 mm",
         "infill": "30%",
         "material": "PETG"
+      }
+    },
+    {
+      "id": "headband-spacer",
+      "name": "Headband Spacer",
+      "project": "headband-spacer",
+      "version": "1.0.0",
+      "status": "operational",
+      "type": "accessory",
+      "description": "Graduated wedge spacer that slides between the AirPods Max mesh canopy and steel frame to reduce clamping force. Continuously adjustable with graduation notches.",
+      "features": [
+        "Tapered wedge: 37mm (narrow) to 47mm (wide) over 80mm",
+        "Two frame rail grooves (5mm wide, 2mm deep) for lateral retention",
+        "4 graduation notches at 16mm intervals (+2mm stretch each)",
+        "1mm chamfer on leading edge for easy insertion"
+      ],
+      "dimensions": {
+        "length": "80 mm",
+        "width_narrow": "37 mm",
+        "width_wide": "47 mm",
+        "thickness": "8 mm"
+      },
+      "stl": "stl/headband-spacer/HeadbandSpacer.stl",
+      "color": "spacer-white",
+      "print": {
+        "orientation": "flat",
+        "supports": false,
+        "layer_height": "0.16 mm",
+        "infill": "100%",
+        "material": "PLA or TPU"
+      }
+    },
+    {
+      "id": "tripod-base",
+      "name": "Tripod Base",
+      "project": "headphone-stand",
+      "version": "2.0.0",
+      "status": "operational",
+      "type": "base",
+      "description": "Organic tripod base with three curved legs radiating from central hub. Column socket in hub accepts ColumnLower. Inspired by furniture design - flowing curves, stable footprint.",
+      "features": [
+        "3 curved legs at 120° intervals radiating 70mm from center",
+        "Legs taper from 22mm wide at hub to 16mm at tips",
+        "Legs curve down 12mm from hub to tip for stability",
+        "Central hub: 48mm diameter, 22mm height",
+        "Column socket: 28mm diameter, 16mm deep (friction-fit)"
+      ],
+      "dimensions": {
+        "footprint": "140mm diameter (3 legs)",
+        "hub": "48mm diameter, 22mm height",
+        "legs": "70mm radius, tapered organic"
+      },
+      "stl": "stl/headphone-stand/TripodBase.stl",
+      "color": "walnut-dark",
+      "print": {
+        "orientation": "upside-down (legs up)",
+        "supports": true,
+        "layer_height": "0.2 mm",
+        "infill": "25%",
+        "material": "PLA or PETG"
+      }
+    },
+    {
+      "id": "column-lower",
+      "name": "Column Lower",
+      "project": "headphone-stand",
+      "version": "2.0.0",
+      "status": "operational",
+      "type": "column",
+      "description": "Tapered outer sleeve that press-fits into TripodBase socket. Hollow interior accepts ColumnUpper for height adjustment. M3 setscrew holes at 4 positions lock height. Includes storage bracket for stretcher vice.",
+      "features": [
+        "Tapered cylinder: 27.5mm base to 24mm top (85mm tall)",
+        "Hollow interior: 21.5mm diameter, 3mm wall thickness",
+        "4 M3 setscrew holes at 15mm vertical spacing",
+        "Setscrews lock ColumnUpper at desired height",
+        "Storage bracket: Horizontal clip (35mm from base) holds stretcher vice when not in use"
+      ],
+      "dimensions": {
+        "outer": "27.5-24mm tapered, 85mm tall",
+        "inner": "21.5mm hollow",
+        "setscrews": "4 M3 holes, 15mm spacing"
+      },
+      "stl": "stl/headphone-stand/ColumnLower.stl",
+      "color": "walnut-medium",
+      "print": {
+        "orientation": "upright",
+        "supports": false,
+        "layer_height": "0.2 mm",
+        "infill": "25%",
+        "material": "PLA or PETG"
+      }
+    },
+    {
+      "id": "column-upper",
+      "name": "Column Upper",
+      "project": "headphone-stand",
+      "version": "2.0.0",
+      "status": "operational",
+      "type": "column",
+      "description": "Tapered inner column with integrated organic cradle at top. Slides into ColumnLower for height adjustment. Cradle features arched top surface and concave headband channel. Integrated spacer hook at back.",
+      "features": [
+        "Tapered cylinder: 20.9mm base to 18mm top (115mm tall)",
+        "Organic teardrop cradle: 75mm wide, 22mm tall",
+        "Arched top surface (R85 convex) with R13 concave headband channel",
+        "Integrated spacer hook slot at cradle back (42mm tall, 4mm gap)",
+        "0.3mm per-side tolerance for smooth sliding in ColumnLower"
+      ],
+      "dimensions": {
+        "column": "20.9-18mm tapered, 115mm tall",
+        "cradle": "75mm wide, organic teardrop",
+        "arch": "R85 convex, R13 concave channel",
+        "spacer_hook": "42mm tall slot"
+      },
+      "stl": "stl/headphone-stand/ColumnUpper.stl",
+      "color": "walnut-light",
+      "print": {
+        "orientation": "upright",
+        "supports": true,
+        "layer_height": "0.2 mm",
+        "infill": "30%",
+        "material": "PLA or PETG"
+      }
+    },
+    {
+      "id": "stretcher-rail",
+      "name": "Stretcher Rail",
+      "project": "headphone-stand",
+      "version": "2.0.0",
+      "status": "operational",
+      "type": "tool",
+      "description": "Organic stretcher vice body with U-channel, fixed ear cup pad, M6 bolt counterbore, and graduation marks. Larger, smoother pad shapes (R50 concave) distribute pressure evenly. Part of gradual headphone stretching tool.",
+      "features": [
+        "145 x 26 x 28mm solid body with U-channel (15mm wide, 18mm deep)",
+        "Fixed end: 58mm tall organic pad with rounded edges, R50 concave face",
+        "Bolt end: M6 counterbore (outside) + clearance hole",
+        "Graduation marks every 5mm on top edge for tracking spread"
+      ],
+      "dimensions": {
+        "body": "145 x 26 x 28mm",
+        "channel": "15mm wide, 18mm deep",
+        "fixed_pad": "58mm tall, organic R50 concave",
+        "graduations": "5mm spacing"
+      },
+      "stl": "stl/headphone-stand/StretcherRail.stl",
+      "color": "vice-steel",
+      "print": {
+        "orientation": "flat",
+        "supports": false,
+        "layer_height": "0.2 mm",
+        "infill": "30%",
+        "material": "PLA or PETG"
+      }
+    },
+    {
+      "id": "stretcher-arm",
+      "name": "Stretcher Arm",
+      "project": "headphone-stand",
+      "version": "2.0.0",
+      "status": "operational",
+      "type": "tool",
+      "description": "Sliding jaw for stretcher vice with organic ear cup pad. Base slides in rail channel, captive M6 nut receives bolt drive. Rounded pad edges and R50 concave curve for gentle contact.",
+      "features": [
+        "22 x 14.4 x 17.5mm base block slides smoothly in channel",
+        "58mm tall organic pad with rounded edges, R50 concave face",
+        "Captive M6 nut pocket on +X face",
+        "M6 bolt clearance hole through base"
+      ],
+      "dimensions": {
+        "base": "22 x 14.4 x 17.5mm",
+        "pad": "58mm tall, organic R50 concave",
+        "nut_pocket": "M6 captive"
+      },
+      "stl": "stl/headphone-stand/StretcherArm.stl",
+      "color": "vice-copper",
+      "print": {
+        "orientation": "flat",
+        "supports": false,
+        "layer_height": "0.2 mm",
+        "infill": "30%",
+        "material": "PLA or PETG"
+      }
+    },
+    {
+      "id": "bolt-retainer",
+      "name": "Bolt Retainer",
+      "project": "headphone-stand",
+      "version": "2.0.0",
+      "status": "operational",
+      "type": "tool",
+      "description": "Threaded knob that screws onto M6 bolt end (past captive nut) to prevent bolt from backing out completely during stretcher operation. Faceted grip for easy hand-tightening. Tap M6 thread after printing.",
+      "features": [
+        "22mm diameter x 8mm thick knob",
+        "16 grip facets around circumference for easy hand-tightening",
+        "M6 x 12mm deep threaded hole (tap after printing)",
+        "Prevents bolt from unscrewing out of arm during operation",
+        "100% infill for strength and threading durability"
+      ],
+      "dimensions": {
+        "knob": "22mm diameter x 8mm thick",
+        "grip": "16 facets",
+        "thread": "M6 x 12mm deep"
+      },
+      "stl": "stl/headphone-stand/BoltRetainer.stl",
+      "color": "brass-knob",
+      "print": {
+        "orientation": "flat (hole down)",
+        "supports": false,
+        "layer_height": "0.16 mm",
+        "infill": "100%",
+        "material": "PLA or PETG"
       }
     }
   ]

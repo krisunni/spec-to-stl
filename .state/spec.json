@@ -1,170 +1,416 @@
 {
-  "project": {
-    "name": "Krypton NAS",
-    "subtitle": "Fortress Spire",
-    "version": "2.0.0",
-    "units": "mm",
-    "description": "3D printable Raspberry Pi 5 NAS enclosure with DC Comics Krypton/Fortress of Solitude theme"
-  },
-  "colors": {
-    "krypton-ice": {
-      "hex": "#C8E6F0",
-      "rgb": [200, 230, 240],
-      "use": "Main shell body"
+  "projects": [
+    {
+      "id": "krypton-nas",
+      "name": "Krypton NAS",
+      "subtitle": "Fortress Spire",
+      "version": "2.0.0",
+      "units": "mm",
+      "description": "3D printable Raspberry Pi 5 NAS enclosure with DC Comics Krypton/Fortress of Solitude theme",
+      "script": "krypton_nas_panels.py",
+      "colors": {
+        "krypton-ice": {
+          "hex": "#C8E6F0",
+          "rgb": [200, 230, 240],
+          "use": "Main shell body"
+        },
+        "fortress-silver": {
+          "hex": "#A8B8C8",
+          "rgb": [168, 184, 200],
+          "use": "Internal mounts"
+        },
+        "crystal-blue": {
+          "hex": "#4A9BD9",
+          "rgb": [74, 155, 217],
+          "use": "Front and rear panels"
+        },
+        "sunstone-gold": {
+          "hex": "#D4A848",
+          "rgb": [212, 168, 72],
+          "use": "Left panel (port side)"
+        },
+        "rao-red": {
+          "hex": "#C84040",
+          "rgb": [200, 64, 64],
+          "use": "Right panel (cable side)"
+        },
+        "phantom-purple": {
+          "hex": "#7B5EA7",
+          "rgb": [123, 94, 167],
+          "use": "Accent features"
+        }
+      },
+      "parameters": {
+        "base_x": 140,
+        "base_y": 100,
+        "height": 160,
+        "taper": 0.85,
+        "top_x": 119,
+        "top_y": 85,
+        "wall": 2.8,
+        "floor": 3.0,
+        "tolerance": 0.3,
+        "panel_thick": 2.5,
+        "lip_width": 5.0,
+        "lip_depth": 2.5,
+        "magnet_diameter": 6.0,
+        "magnet_height": 2.0,
+        "magnet_recess": 1.5,
+        "panel_margin": 15,
+        "panel_bottom": 15,
+        "panel_top_margin": 25,
+        "panel_height": 120
+      },
+      "components": [
+        {
+          "id": "main-shell",
+          "name": "Main Shell",
+          "freecad_object": "MainShell",
+          "stl": "stl/krypton-nas/MainShell.stl",
+          "color": "krypton-ice",
+          "type": "enclosure",
+          "dimensions": { "base": "140 x 100", "height": 160, "wall": 2.8, "floor": 3.0 },
+          "print": { "orientation": "opening-up", "supports": false, "layer_height": 0.2, "infill": "15%", "material": "PETG" }
+        },
+        {
+          "id": "front-panel",
+          "name": "Front Panel - Crystal Burst",
+          "freecad_object": "FrontPanel_CrystalBurst",
+          "stl": "stl/krypton-nas/FrontPanel_CrystalBurst.stl",
+          "color": "crystal-blue",
+          "type": "panel",
+          "dimensions": { "height": 120, "thickness": 2.5 },
+          "print": { "orientation": "pattern-up", "supports": false, "layer_height": 0.2, "infill": "100%", "material": "PLA" }
+        },
+        {
+          "id": "rear-panel",
+          "name": "Rear Panel - Fortress Gate",
+          "freecad_object": "RearPanel_FortressGate",
+          "stl": "stl/krypton-nas/RearPanel_FortressGate.stl",
+          "color": "crystal-blue",
+          "type": "panel",
+          "dimensions": { "height": 120, "thickness": 2.5 },
+          "print": { "orientation": "pattern-up", "supports": false, "layer_height": 0.2, "infill": "100%", "material": "PLA" }
+        },
+        {
+          "id": "left-panel",
+          "name": "Left Panel - Shield Array",
+          "freecad_object": "LeftPanel_ShieldArray",
+          "stl": "stl/krypton-nas/LeftPanel_ShieldArray.stl",
+          "color": "sunstone-gold",
+          "type": "panel",
+          "dimensions": { "height": 120, "thickness": 2.5 },
+          "print": { "orientation": "pattern-up", "supports": false, "layer_height": 0.2, "infill": "100%", "material": "PLA" }
+        },
+        {
+          "id": "right-panel",
+          "name": "Right Panel - Crystal Wave",
+          "freecad_object": "RightPanel_CrystalWave",
+          "stl": "stl/krypton-nas/RightPanel_CrystalWave.stl",
+          "color": "rao-red",
+          "type": "panel",
+          "dimensions": { "height": 120, "thickness": 2.5 },
+          "print": { "orientation": "pattern-up", "supports": false, "layer_height": 0.2, "infill": "100%", "material": "PLA" }
+        },
+        {
+          "id": "ssd-mount",
+          "name": "SSD Clamp Mount",
+          "freecad_object": "SSD_ClampMount",
+          "stl": "stl/krypton-nas/SSD_ClampMount.stl",
+          "color": "fortress-silver",
+          "type": "mount",
+          "dimensions": { "fits": "125 x 41 x 14", "z_position": 3 },
+          "print": { "orientation": "flat", "supports": false, "layer_height": 0.2, "infill": "30%", "material": "PETG" }
+        },
+        {
+          "id": "ethernet-mount",
+          "name": "Ethernet Clamp Mount",
+          "freecad_object": "Ethernet_ClampMount",
+          "stl": "stl/krypton-nas/Ethernet_ClampMount.stl",
+          "color": "fortress-silver",
+          "type": "mount",
+          "dimensions": { "fits": "62 x 25 x 15", "z_position": 35 },
+          "print": { "orientation": "flat", "supports": false, "layer_height": 0.2, "infill": "30%", "material": "PETG" }
+        },
+        {
+          "id": "pi5-mount",
+          "name": "Raspberry Pi 5 Mount",
+          "freecad_object": "Pi5_Mount",
+          "stl": "stl/krypton-nas/Pi5_Mount.stl",
+          "color": "fortress-silver",
+          "type": "mount",
+          "dimensions": { "board": "85 x 56", "holes": "M2.5", "z_position": 65, "board_surface": 73 },
+          "print": { "orientation": "flat", "supports": false, "layer_height": 0.2, "infill": "30%", "material": "PETG" }
+        }
+      ],
+      "hardware": [
+        { "item": "Neodymium magnets", "spec": "6mm dia x 2mm", "quantity": 48, "note": "24 in shell + 24 in panels (6 per side x 2)" },
+        { "item": "M2.5 x 6mm screws", "spec": "Phillips pan head", "quantity": 4, "note": "Pi 5 mounting" },
+        { "item": "Raspberry Pi 5", "spec": "Any RAM variant", "quantity": 1, "note": "85 x 56mm board" },
+        { "item": "UGREEN M.2 SSD Enclosure", "spec": "USB-C, 125 x 41 x 14mm", "quantity": 1, "note": "NVMe or SATA" },
+        { "item": "UGREEN USB-C Ethernet Adapter", "spec": "Gigabit, 62 x 25 x 15mm", "quantity": 1, "note": "USB-C to RJ45" },
+        { "item": "USB-C power supply", "spec": "5V 5A (27W PD)", "quantity": 1, "note": "Official Pi 5 PSU recommended" },
+        { "item": "USB 3.0 cable", "spec": "USB-A to USB-C, short", "quantity": 1, "note": "SSD to Pi 5" },
+        { "item": "Ethernet cable", "spec": "Cat5e/Cat6, short", "quantity": 1, "note": "Adapter to router/switch" }
+      ],
+      "assembly": {
+        "stack_order": [
+          "SSD Clamp Mount (z=3mm) - snap SSD enclosure into rails",
+          "Ethernet Clamp Mount (z=35mm) - snap adapter into cradle",
+          "Pi 5 Mount (z=65mm) - secure with 4x M2.5 screws",
+          "Route cables: USB-C power, USB 3.0 to SSD, Ethernet",
+          "Attach panels: front, rear, left, right (magnets self-align)"
+        ],
+        "notes": [
+          "Insert magnets before assembly - observe polarity (opposite poles in shell vs panel)",
+          "Shell prints opening-up, no supports needed",
+          "Panels print flat with pattern facing up",
+          "Test-fit panels before gluing magnets - adjust tolerance if needed",
+          "Cable routing: power enters bottom-left, SSD cable exits right side"
+        ]
+      }
     },
-    "fortress-silver": {
-      "hex": "#A8B8C8",
-      "rgb": [168, 184, 200],
-      "use": "Internal mounts"
+    {
+      "id": "headband-spacer",
+      "name": "AirPods Max Headband Spacer",
+      "subtitle": "Adjustable Wedge",
+      "version": "1.0.0",
+      "units": "mm",
+      "description": "Graduated wedge spacer that slides between the AirPods Max mesh canopy and steel frame to reduce clamping force. Continuously adjustable with graduation notches.",
+      "script": "headband_spacer.py",
+      "colors": {
+        "spacer-white": {
+          "hex": "#E8E8E8",
+          "rgb": [232, 232, 232],
+          "use": "Spacer body"
+        }
+      },
+      "parameters": {
+        "length": 80,
+        "width_narrow": 37,
+        "width_wide": 47,
+        "thickness": 8,
+        "groove_width": 5,
+        "groove_depth": 2,
+        "notch_spacing": 16,
+        "notch_count": 4,
+        "chamfer": 1
+      },
+      "components": [
+        {
+          "id": "headband-spacer",
+          "name": "Headband Spacer",
+          "freecad_object": "HeadbandSpacer",
+          "stl": "stl/headband-spacer/HeadbandSpacer.stl",
+          "color": "spacer-white",
+          "type": "accessory",
+          "dimensions": {
+            "length": 80,
+            "width_narrow": 37,
+            "width_wide": 47,
+            "thickness": 8,
+            "taper": "+10mm over 80mm"
+          },
+          "print": { "orientation": "flat", "supports": false, "layer_height": 0.16, "infill": "100%", "material": "PLA or TPU" }
+        }
+      ],
+      "hardware": [],
+      "assembly": {
+        "stack_order": [
+          "Slide narrow end (37mm) under mesh canopy at top of headband",
+          "Push spacer further to increase frame spread",
+          "Align graduation notch with frame edge for repeatable position"
+        ],
+        "notes": [
+          "Each notch = +2mm of stretch (4 notches total: +2/4/6/8mm)",
+          "TPU material adds grip and cushion against the mesh",
+          "No hardware required - friction fit between frame and canopy"
+        ]
+      }
     },
-    "crystal-blue": {
-      "hex": "#4A9BD9",
-      "rgb": [74, 155, 217],
-      "use": "Front and rear panels"
-    },
-    "sunstone-gold": {
-      "hex": "#D4A848",
-      "rgb": [212, 168, 72],
-      "use": "Left panel (port side)"
-    },
-    "rao-red": {
-      "hex": "#C84040",
-      "rgb": [200, 64, 64],
-      "use": "Right panel (cable side)"
-    },
-    "phantom-purple": {
-      "hex": "#7B5EA7",
-      "rgb": [123, 94, 167],
-      "use": "Accent features"
+    {
+      "id": "headphone-stand",
+      "name": "AirPods Max Headphone Stand",
+      "subtitle": "Organic Sculptural Design",
+      "version": "2.0.0",
+      "units": "mm",
+      "description": "Elegant organic headphone stand with tripod base, tapered columns, and integrated spacer hook. Height-adjustable via setscrew. Includes stretcher vice tool with M6 bolt drive and threaded retainer knob. Inspired by fine furniture - flowing curves, minimal visible mechanics.",
+      "script": "headphone_stand.py",
+      "colors": {
+        "walnut-dark": {
+          "hex": "#3E2723",
+          "rgb": [62, 39, 35],
+          "use": "Tripod base - rich dark brown"
+        },
+        "walnut-medium": {
+          "hex": "#6D4C41",
+          "rgb": [109, 76, 65],
+          "use": "Lower column"
+        },
+        "walnut-light": {
+          "hex": "#A1887F",
+          "rgb": [161, 136, 127],
+          "use": "Upper column and cradle"
+        },
+        "vice-steel": {
+          "hex": "#546E7A",
+          "rgb": [84, 110, 122],
+          "use": "Stretcher rail - blue-grey steel"
+        },
+        "vice-copper": {
+          "hex": "#D84315",
+          "rgb": [216, 67, 21],
+          "use": "Stretcher arm - copper accent"
+        },
+        "brass-knob": {
+          "hex": "#D4AF37",
+          "rgb": [212, 175, 55],
+          "use": "Bolt retainer knob - brass finish"
+        }
+      },
+      "parameters": {
+        "leg_count": 3,
+        "leg_radius": 70,
+        "hub_d": 48,
+        "hub_h": 22,
+        "col_lower_d_base": 27.5,
+        "col_lower_d_top": 24,
+        "col_lower_h": 85,
+        "col_upper_d_base": 20.9,
+        "col_upper_d_top": 18,
+        "col_upper_h": 115,
+        "setscrew_count": 4,
+        "setscrew_spacing": 15,
+        "cradle_w": 75,
+        "cradle_arc_r": 85,
+        "curve_r": 13,
+        "vice_l": 145,
+        "vice_w": 26,
+        "vice_pad_h": 58,
+        "knob_d": 22
+      },
+      "components": [
+        {
+          "id": "tripod-base",
+          "name": "Tripod Base",
+          "freecad_object": "TripodBase",
+          "stl": "stl/headphone-stand/TripodBase.stl",
+          "color": "walnut-dark",
+          "type": "base",
+          "dimensions": {
+            "footprint": "140mm diameter (3 curved legs)",
+            "hub": "48mm diameter, 22mm height",
+            "legs": "70mm radius, tapered organic shape"
+          },
+          "print": { "orientation": "upside-down (legs up)", "supports": true, "layer_height": 0.2, "infill": "25%", "material": "PLA or PETG" }
+        },
+        {
+          "id": "column-lower",
+          "name": "Column Lower",
+          "freecad_object": "ColumnLower",
+          "stl": "stl/headphone-stand/ColumnLower.stl",
+          "color": "walnut-medium",
+          "type": "column",
+          "dimensions": {
+            "outer": "27.5-24mm tapered, 85mm tall",
+            "inner": "21.5mm hollow",
+            "setscrews": "4 M3 holes at 15mm spacing",
+            "storage_bracket": "Horizontal clip for stretcher vice (35mm from base)"
+          },
+          "print": { "orientation": "upright", "supports": false, "layer_height": 0.2, "infill": "25%", "material": "PLA or PETG" }
+        },
+        {
+          "id": "column-upper",
+          "name": "Column Upper",
+          "freecad_object": "ColumnUpper",
+          "stl": "stl/headphone-stand/ColumnUpper.stl",
+          "color": "walnut-light",
+          "type": "column",
+          "dimensions": {
+            "column": "20.9-18mm tapered, 115mm tall",
+            "cradle": "75mm wide, organic teardrop",
+            "arch": "R85 convex top, R13 concave channel",
+            "spacer_hook": "Integrated slot at back (42mm tall)"
+          },
+          "print": { "orientation": "upright", "supports": true, "layer_height": 0.2, "infill": "30%", "material": "PLA or PETG" }
+        },
+        {
+          "id": "stretcher-rail",
+          "name": "Stretcher Rail",
+          "freecad_object": "StretcherRail",
+          "stl": "stl/headphone-stand/StretcherRail.stl",
+          "color": "vice-steel",
+          "type": "tool",
+          "dimensions": {
+            "body": "145 x 26 x 28mm",
+            "channel": "15mm wide, 18mm deep",
+            "fixed_pad": "58mm tall, organic shape, concave R50",
+            "graduations": "5mm spacing"
+          },
+          "print": { "orientation": "flat", "supports": false, "layer_height": 0.2, "infill": "30%", "material": "PLA or PETG" }
+        },
+        {
+          "id": "stretcher-arm",
+          "name": "Stretcher Arm",
+          "freecad_object": "StretcherArm",
+          "stl": "stl/headphone-stand/StretcherArm.stl",
+          "color": "vice-copper",
+          "type": "tool",
+          "dimensions": {
+            "base": "22 x 14.4 x 17.5mm",
+            "pad": "58mm tall, organic shape, concave R50",
+            "nut_pocket": "M6 captive nut"
+          },
+          "print": { "orientation": "flat", "supports": false, "layer_height": 0.2, "infill": "30%", "material": "PLA or PETG" }
+        },
+        {
+          "id": "bolt-retainer",
+          "name": "Bolt Retainer",
+          "freecad_object": "BoltRetainer",
+          "stl": "stl/headphone-stand/BoltRetainer.stl",
+          "color": "brass-knob",
+          "type": "tool",
+          "dimensions": {
+            "knob": "22mm diameter x 8mm thick",
+            "grip": "16 facets",
+            "thread": "M6 threaded hole (12mm deep, tap after printing)"
+          },
+          "print": { "orientation": "flat (hole down)", "supports": false, "layer_height": 0.16, "infill": "100%", "material": "PLA or PETG" }
+        }
+      ],
+      "hardware": [
+        { "item": "M6 x 100mm hex bolt", "spec": "Hex head", "quantity": 1, "note": "Drives stretcher arm along rail" },
+        { "item": "M6 hex nut", "spec": "Standard", "quantity": 1, "note": "Captive in stretcher arm pocket" },
+        { "item": "M3 x 10mm setscrew", "spec": "Socket head or thumbscrew", "quantity": 1, "note": "Height adjustment lock" },
+        { "item": "M6 tap", "spec": "1.0mm pitch", "quantity": 1, "note": "Thread BoltRetainer knob (optional - can use without)" }
+      ],
+      "assembly": {
+        "stack_order": [
+          "Stand: Press ColumnLower into TripodBase socket (friction fit)",
+          "Stand: Slide ColumnUpper into ColumnLower from top",
+          "Stand: Adjust to desired height, lock with M3 setscrew through side hole",
+          "Stand: Place AirPods Max headband in organic arched cradle",
+          "Stand: Optionally hang headband spacer in integrated back hook slot",
+          "Stretcher: Insert M6 nut into StretcherArm captive pocket",
+          "Stretcher: Slide arm into rail U-channel",
+          "Stretcher: Thread M6 bolt through rail bolt-end hole into captive nut",
+          "Stretcher: (Optional) Tap BoltRetainer with M6 tap, thread onto bolt end past nut",
+          "Stretcher: Place headphones between pads, turn bolt clockwise to spread",
+          "Storage: When not using stretcher, clip StretcherRail onto storage bracket on ColumnLower"
+        ],
+        "notes": [
+          "Tripod base prints upside-down (legs pointing up) with supports for leg curves",
+          "4 height positions: 69mm to 114mm range (15mm increments)",
+          "M3 setscrew holds height adjustment - can use thumbscrew for tool-free adjustment",
+          "ColumnUpper has 0.3mm tolerance per side for smooth sliding",
+          "Spacer hook is integrated into cradle back - cleaner than shelf design",
+          "Stretcher: M6 bolt = 1mm/turn spread (very fine control)",
+          "Stretcher: Turn bolt gradually over days/weeks to reduce clamping force",
+          "Stretcher: BoltRetainer prevents bolt from backing out completely (tap M6 thread after printing)",
+          "Stretcher: Graduation marks every 5mm on rail for tracking spread distance",
+          "Organic pad curves (R50) distribute pressure evenly on ear cups"
+        ]
+      }
     }
-  },
-  "parameters": {
-    "base_x": 140,
-    "base_y": 100,
-    "height": 160,
-    "taper": 0.85,
-    "top_x": 119,
-    "top_y": 85,
-    "wall": 2.8,
-    "floor": 3.0,
-    "tolerance": 0.3,
-    "panel_thick": 2.5,
-    "lip_width": 5.0,
-    "lip_depth": 2.5,
-    "magnet_diameter": 6.0,
-    "magnet_height": 2.0,
-    "magnet_recess": 1.5,
-    "panel_margin": 15,
-    "panel_bottom": 15,
-    "panel_top_margin": 25,
-    "panel_height": 120
-  },
-  "components": [
-    {
-      "id": "main-shell",
-      "name": "Main Shell",
-      "freecad_object": "MainShell",
-      "stl": "stl/MainShell.stl",
-      "color": "krypton-ice",
-      "type": "enclosure",
-      "dimensions": { "base": "140 x 100", "height": 160, "wall": 2.8, "floor": 3.0 },
-      "print": { "orientation": "opening-up", "supports": false, "layer_height": 0.2, "infill": "15%", "material": "PETG" }
-    },
-    {
-      "id": "front-panel",
-      "name": "Front Panel - Crystal Burst",
-      "freecad_object": "FrontPanel_CrystalBurst",
-      "stl": "stl/FrontPanel_CrystalBurst.stl",
-      "color": "crystal-blue",
-      "type": "panel",
-      "dimensions": { "height": 120, "thickness": 2.5 },
-      "print": { "orientation": "pattern-up", "supports": false, "layer_height": 0.2, "infill": "100%", "material": "PLA" }
-    },
-    {
-      "id": "rear-panel",
-      "name": "Rear Panel - Fortress Gate",
-      "freecad_object": "RearPanel_FortressGate",
-      "stl": "stl/RearPanel_FortressGate.stl",
-      "color": "crystal-blue",
-      "type": "panel",
-      "dimensions": { "height": 120, "thickness": 2.5 },
-      "print": { "orientation": "pattern-up", "supports": false, "layer_height": 0.2, "infill": "100%", "material": "PLA" }
-    },
-    {
-      "id": "left-panel",
-      "name": "Left Panel - Shield Array",
-      "freecad_object": "LeftPanel_ShieldArray",
-      "stl": "stl/LeftPanel_ShieldArray.stl",
-      "color": "sunstone-gold",
-      "type": "panel",
-      "dimensions": { "height": 120, "thickness": 2.5 },
-      "print": { "orientation": "pattern-up", "supports": false, "layer_height": 0.2, "infill": "100%", "material": "PLA" }
-    },
-    {
-      "id": "right-panel",
-      "name": "Right Panel - Crystal Wave",
-      "freecad_object": "RightPanel_CrystalWave",
-      "stl": "stl/RightPanel_CrystalWave.stl",
-      "color": "rao-red",
-      "type": "panel",
-      "dimensions": { "height": 120, "thickness": 2.5 },
-      "print": { "orientation": "pattern-up", "supports": false, "layer_height": 0.2, "infill": "100%", "material": "PLA" }
-    },
-    {
-      "id": "ssd-mount",
-      "name": "SSD Clamp Mount",
-      "freecad_object": "SSD_ClampMount",
-      "stl": "stl/SSD_ClampMount.stl",
-      "color": "fortress-silver",
-      "type": "mount",
-      "dimensions": { "fits": "125 x 41 x 14", "z_position": 3 },
-      "print": { "orientation": "flat", "supports": false, "layer_height": 0.2, "infill": "30%", "material": "PETG" }
-    },
-    {
-      "id": "ethernet-mount",
-      "name": "Ethernet Clamp Mount",
-      "freecad_object": "Ethernet_ClampMount",
-      "stl": "stl/Ethernet_ClampMount.stl",
-      "color": "fortress-silver",
-      "type": "mount",
-      "dimensions": { "fits": "62 x 25 x 15", "z_position": 35 },
-      "print": { "orientation": "flat", "supports": false, "layer_height": 0.2, "infill": "30%", "material": "PETG" }
-    },
-    {
-      "id": "pi5-mount",
-      "name": "Raspberry Pi 5 Mount",
-      "freecad_object": "Pi5_Mount",
-      "stl": "stl/Pi5_Mount.stl",
-      "color": "fortress-silver",
-      "type": "mount",
-      "dimensions": { "board": "85 x 56", "holes": "M2.5", "z_position": 65, "board_surface": 73 },
-      "print": { "orientation": "flat", "supports": false, "layer_height": 0.2, "infill": "30%", "material": "PETG" }
-    }
-  ],
-  "hardware": [
-    { "item": "Neodymium magnets", "spec": "6mm dia x 2mm", "quantity": 48, "note": "24 in shell + 24 in panels (6 per side x 2)" },
-    { "item": "M2.5 x 6mm screws", "spec": "Phillips pan head", "quantity": 4, "note": "Pi 5 mounting" },
-    { "item": "Raspberry Pi 5", "spec": "Any RAM variant", "quantity": 1, "note": "85 x 56mm board" },
-    { "item": "UGREEN M.2 SSD Enclosure", "spec": "USB-C, 125 x 41 x 14mm", "quantity": 1, "note": "NVMe or SATA" },
-    { "item": "UGREEN USB-C Ethernet Adapter", "spec": "Gigabit, 62 x 25 x 15mm", "quantity": 1, "note": "USB-C to RJ45" },
-    { "item": "USB-C power supply", "spec": "5V 5A (27W PD)", "quantity": 1, "note": "Official Pi 5 PSU recommended" },
-    { "item": "USB 3.0 cable", "spec": "USB-A to USB-C, short", "quantity": 1, "note": "SSD to Pi 5" },
-    { "item": "Ethernet cable", "spec": "Cat5e/Cat6, short", "quantity": 1, "note": "Adapter to router/switch" }
-  ],
-  "assembly": {
-    "stack_order": [
-      "SSD Clamp Mount (z=3mm) - snap SSD enclosure into rails",
-      "Ethernet Clamp Mount (z=35mm) - snap adapter into cradle",
-      "Pi 5 Mount (z=65mm) - secure with 4x M2.5 screws",
-      "Route cables: USB-C power, USB 3.0 to SSD, Ethernet",
-      "Attach panels: front, rear, left, right (magnets self-align)"
-    ],
-    "notes": [
-      "Insert magnets before assembly - observe polarity (opposite poles in shell vs panel)",
-      "Shell prints opening-up, no supports needed",
-      "Panels print flat with pattern facing up",
-      "Test-fit panels before gluing magnets - adjust tolerance if needed",
-      "Cable routing: power enters bottom-left, SSD cable exits right side"
-    ]
-  }
+  ]
 }
